@@ -51,12 +51,10 @@ importers:
         specifier: ^6.2.0
         version: 6.2.3
 
-  packages/tailwind-ds-presets: {}
-
-  packages/util-types:
-    dependencies:
+  packages/react-types:
+    devDependencies:
       '@types/react':
-        specifier: ^19.0.12
+        specifier: ^19.0.10
         version: 19.0.12
 
 packages:
