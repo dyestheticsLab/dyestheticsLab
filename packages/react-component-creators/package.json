@@ -5,8 +5,7 @@
   "type": "module",
   "exports": {
     "./create-react-meta-component": {
-      "import": "./src/create-react-meta-component.jsx",
-      "types": "./src/create-react-meta-component.d.ts"
+      "import": "./src/create-react-meta-component/index.tsx"
     }
   },
   "scripts": {
