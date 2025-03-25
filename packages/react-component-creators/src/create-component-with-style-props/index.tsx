@@ -1,16 +1,16 @@
-import { ElementType } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ComponentProps, ElementType } from 'react';
 import { CreateComponentWithStyleProps } from "./types";
 
-export default function createComponentWithStyleProps<
-  StyleProps extends Record<string, any>,
-  Props extends Record<string, any>,
+export function createComponentWithStyleProps<
+  StyleProps,
   IComponent extends ElementType
 >({
   extractStyleProps,
   classNameResolver,
   Component
-}: CreateComponentWithStyleProps<StyleProps, Props, IComponent>) {
-  return ({ className, ...props }: Props) => {
+}: CreateComponentWithStyleProps<StyleProps, IComponent>) {
+  return ({ className, ...props }: ComponentProps<IComponent> & StyleProps) => {
     const { styleProps, componentOwnProps } = extractStyleProps(props);
 
     const resolvedClassName = classNameResolver(styleProps, className);
@@ -18,3 +18,5 @@ export default function createComponentWithStyleProps<
     return <Component {...componentOwnProps as any} className={resolvedClassName} />;
   };
 }
+
+export type * from './types';

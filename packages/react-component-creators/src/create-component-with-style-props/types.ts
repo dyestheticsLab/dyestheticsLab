@@ -1,7 +1,12 @@
-import { ElementType } from 'react';
+import { ComponentProps, ElementType } from 'react';
 
-export interface CreateComponentWithStyleProps<StyleProps, Props, IComponent extends ElementType> {
-  extractStyleProps(props: Omit<Props, "className">): { styleProps: StyleProps; componentOwnProps: Omit<Props, keyof StyleProps> };
-  classNameResolver(styleProps: StyleProps, className?: string): string;
+export interface CreateComponentWithStyleProps<StyleProps,IComponent extends ElementType> {
+  extractStyleProps(
+    props: Omit<ComponentProps<IComponent> & StyleProps, "className">
+  ): {
+    styleProps: StyleProps;
+    componentOwnProps: Omit<ComponentProps<IComponent>, "className">
+  };
+  classNameResolver(styleProps: StyleProps, className?: string): string | undefined;
   Component: IComponent;
 }
