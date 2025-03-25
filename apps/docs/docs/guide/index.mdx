@@ -2,26 +2,28 @@ import { Tab, Tabs } from 'rspress/theme';
 
 # Component react creators
 
-As for now we have only one utility, we plan to create more, of course, in the following weeks.
+As of now we have only one utility, we plan to create more, of course, in the following weeks.
 
 This utility is the **react component creators**
 
 ## What does it do?
-This set of utilities are actually react component factories for what some libraries like
+These utilities are actually react component factories for what some libraries like
 MUI and Mantine know as [Polymorphic Components](https://mantine.dev/guides/polymorphic/)
 and also to create components that extract some props and use them to resolve the className.
-There is a reason we are creating this, we have some ideas in mind following the
+There is a reason we are creating this; we have some ideas in mind following the
 [article we published in medium](https://medium.com/p/0d7195316741#1045-9740101021bc)
 to create some optimizations in build/compile time.
 
 In short, this means you can create a `Button` that can render not only as a `button` but as any
 other React `ElementType`.
 
-Also you we are going to be able to create a className resolver function that is going to extract
-from your props what info is needed to create a className according, for instance, some variants
+Also you are going to be able to create a className resolver function that extracts
+from your props what info is needed to create a className according to, for instance, some variants
 of your component, and separate them from the real props of the component.
 
-I almost forgot to mention that it is typesafe, so your IDE is going to autocomplete the needed props
+I almost forgot to mention that it is typesafe, so your IDE is going to autocomplete the needed props.
+
+> **⚠️ WARNING**: This library is only compatible with React 19. It will not work with earlier versions of React due to dependency on new features and APIs introduced in React 19.
 
 ## Installation
 
@@ -46,7 +48,7 @@ npm install @dyesthetics-lab/react-component-creators
 
 ## Creating a styled component
 
-This is factory of a polymorphic component and as well admits variant props for your custom className
+This is a factory of a polymorphic component that also accepts variant props for your custom className
 resolver
 
 ```tsx title="Button.tsx"
@@ -73,7 +75,7 @@ export const Button = createStyledComponent<'button', ButtonProps>({
 
 ```
 The `extractStyleProps` is a needed function to separate what props are real props
-ow your component (`componentOwnProps`) and what props are going to be used to resolve the className
+of your component (`componentOwnProps`) and what props are going to be used to resolve the className
 (`styleProps`).
 
 The `classNameResolver` will only get what you defined in `extractStyleProps` as `styleProps` and
@@ -141,7 +143,7 @@ But if you do not want to create a custom className resolver and only need a pol
 you can use `createReactMetaComponent`
 
 ## Creating a component that extracts some props to create the className
-But this time is not a polymorphic component, you can use `createComponentWithStyleProps`
+But this time it is not a polymorphic component, you can use `createComponentWithStyleProps`
 and the component is not going to have an `as` prop.
 
 
@@ -169,7 +171,7 @@ export const Button = createComponentWithStyleProps<'button', ButtonProps>({
 });
 
 ```
-This component is always going to be button.
+This component is always going to be a button.
 
 ## Final words
 
@@ -183,12 +185,10 @@ component directly in the code like this (suppose we were using tailwindVariants
 ```
 
 And it is really good, but we wanted to give some structure to react components to make them
-to have by props all your variants.
+have all your variants by props.
 
-If you red the article about our ideas that came from our adventures in the place were we study,
+If you read the article about our ideas that came from our adventures in the place where we study,
 you may know we are planning on using a compiler to make some optimizations at build time.
 
 And since react is something that is going to be in our projects, we wanted to make the first
 step in this direction.
-
-
