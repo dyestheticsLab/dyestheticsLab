@@ -2,19 +2,21 @@ import * as path from 'node:path';
 import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
+  globalStyles: path.join(__dirname, 'styles/index.css'),
+  base: '/dyestheticsLabGHPages/',
   root: path.join(__dirname, 'docs'),
-  title: 'My Site',
-  icon: '/rspress-icon.png',
+  title: 'Dyesthetics Lab',
+  icon: '/dystopian-eye.webp',
   logo: {
-    light: '/rspress-light-logo.png',
-    dark: '/rspress-dark-logo.png',
+    light: '/dystopian-eye.webp',
+    dark: '/dystopian-eye.webp',
   },
   themeConfig: {
     socialLinks: [
       {
         icon: 'github',
         mode: 'link',
-        content: 'https://github.com/web-infra-dev/rspress',
+        content: 'https://github.com/dyestheticsLab/dyestheticsLab',
       },
     ],
   },
