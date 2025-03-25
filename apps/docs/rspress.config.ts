@@ -5,7 +5,7 @@ export default defineConfig({
   globalStyles: path.join(__dirname, 'styles/index.css'),
   base: '/dyestheticsLabGHPages/',
   root: path.join(__dirname, 'docs'),
-  title: 'My Site',
+  title: 'Dyesthetics Lab',
   icon: '/dystopian-eye.webp',
   logo: {
     light: '/dystopian-eye.webp',
@@ -16,7 +16,7 @@ export default defineConfig({
       {
         icon: 'github',
         mode: 'link',
-        content: 'https://github.com/web-infra-dev/rspress',
+        content: 'https://github.com/dyestheticsLab/dyestheticsLab',
       },
     ],
   },
