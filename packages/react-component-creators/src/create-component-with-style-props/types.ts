@@ -1,6 +1,6 @@
 import { ComponentProps, ElementType } from 'react';
 
-export interface CreateComponentWithStyleProps<StyleProps,IComponent extends ElementType> {
+export interface CreateComponentWithStyleOptions<StyleProps,IComponent extends ElementType> {
   extractStyleProps(
     props: Omit<ComponentProps<IComponent> & StyleProps, "className">
   ): {

@@ -3,16 +3,18 @@ import type { MorphProps, MetaReactElementProps }  from "@dyesthetics-lab/react-
 
 export type ComponentResolver<Props> = (props: Props) => ElementType | undefined;
 
+export interface CreateReactMetaComponentOptions<DefaultElement extends ElementType, Props> {
+  defaultElement: DefaultElement;
+  componentResolver?: ComponentResolver<Props & MorphProps<ElementType> & Record<string, unknown>>;
+}
+
 export function createReactMetaComponent<
   DefaultElement extends ElementType,
-  Props extends object
+  Props
 >({
   defaultElement,
   componentResolver,
-}: {
-  defaultElement: DefaultElement;
-  componentResolver?: ComponentResolver<Props & MorphProps<ElementType> & Record<string, unknown>>;
-}) {
+}: CreateReactMetaComponentOptions<DefaultElement, Props>) {
   return function Component<RealElementType extends ElementType = DefaultElement>(
     props: MetaReactElementProps<RealElementType, Props> & Record<string, unknown>
   ) {
