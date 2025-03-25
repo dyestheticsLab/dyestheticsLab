@@ -2,7 +2,11 @@
   "name": "@dyesthetics-lab/react-component-creators",
   "private": false,
   "version": "0.0.0",
+  "license": "MIT",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "exports": {
     "./create-react-meta-component": {
       "import": "./src/create-react-meta-component/index.tsx"
