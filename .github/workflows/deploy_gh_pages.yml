@@ -1,0 +1,66 @@
+name: Docs GH Pages Deployment
+ 
+on:
+  workflow_dispatch:
+ 
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+ 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '9.12.2'
+          run_install: false
+ 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: './pnpm-lock.yaml'
+ 
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          
+      - name: Build docs app
+        working-directory: ./apps/docs
+        run: pnpm run build
+ 
+      - name: Checkout gh pages repository
+        uses: actions/checkout@v4
+        with:
+          repository: dyestheticsLab/dyestheticsLabGHPages
+          token: ${{ secrets.GH_PAT }}
+          path: gp-pages-repo
+ 
+      - name: Deploy documentation
+        run: |
+          cd gp-pages-repo
+          find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
+          
+          cp -r ../apps/docs/doc_build/* .
+          
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+ 
+          git add .
+          git commit -m "deploy: update docs
+ 
+          Update details:
+          - Source repository: ${{ github.repository }}
+          - Source commit: ${{ github.sha }}
+          - Source branch: ${{ github.ref_name }}
+          - Trigger event: ${{ github.event_name }}
+ 
+          Technical details:
+          - App path: apps/docs
+          - Node.js: v22
+          - Package manager: pnpm@9.12.2"
+          
+          git push origin main

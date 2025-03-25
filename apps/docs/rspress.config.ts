@@ -3,6 +3,7 @@ import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
   globalStyles: path.join(__dirname, 'styles/index.css'),
+  base: '/dyestheticsLabGHPages/',
   root: path.join(__dirname, 'docs'),
   title: 'My Site',
   icon: '/dystopian-eye.webp',
