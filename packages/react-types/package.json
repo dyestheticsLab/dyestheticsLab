@@ -1,6 +1,7 @@
 {
   "name": "@dyesthetics-lab/react-types",
   "version": "1.0.0",
+  "private": false,
   "description": "",
   "main": "index.ts",
   "scripts": {

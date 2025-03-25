@@ -1,6 +1,6 @@
 {
   "name": "@dyesthetics-lab/react-component-creators",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "exports": {
@@ -9,7 +9,13 @@
     }
   },
   "publishConfig": {
-    "main": "dist/index.js"
+    "main": "dist/index.js",
+    "exports": {
+      ".": {
+        "import": "./dist/react-component-creators.es.js",
+        "types": "./dist/index.d.ts"
+      }
+    }
   },
   "scripts": {
     "dev": "vite",
