@@ -35,7 +35,7 @@ jobs:
       - name: Get package version
         id: get_version
         run: |
-          PACKAGE_JSON_PATH=packages/my-package/package.json # Path to the package.json
+          PACKAGE_JSON_PATH=package.json
           VERSION=$(jq -r '.version' $PACKAGE_JSON_PATH)
           echo "VERSION=$VERSION"
           echo "version=$VERSION" >> $GITHUB_EN

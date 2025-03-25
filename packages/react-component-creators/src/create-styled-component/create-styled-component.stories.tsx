@@ -6,7 +6,7 @@ import { expect, within } from '@storybook/test'
 
 const Button = createStyledComponent<'button', {appearance: string}>({
   Component: 'button',
-  extractStyleProps: (props) => {
+  divideProps: (props) => {
     const { appearance, ...styleProps } = props;
     return { styleProps: {appearance}, componentOwnProps: styleProps};
   },

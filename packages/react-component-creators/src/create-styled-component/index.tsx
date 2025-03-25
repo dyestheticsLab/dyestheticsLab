@@ -20,7 +20,8 @@ export function createStyledComponent<
   componentResolver,
   Component: InitialComponent,
   classNameResolver,
-  extractStyleProps,
+  divideProps,
+  stylePropResolver
 }: CreateStyledComponentOptions<DefaultElement, StyledProps, ComponentProps>) {
   return function Component<RealElementType extends ElementType = DefaultElement>(
     props: MetaReactElementProps<RealElementType, ComponentProps> & Record<string, unknown>
@@ -28,11 +29,18 @@ export function createStyledComponent<
     const { as, className, ...restProps } = props;
     const Component = componentResolver?.(props) ?? as ?? InitialComponent;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { styleProps, componentOwnProps } = extractStyleProps(restProps as any);
+    const { styleProps, componentOwnProps } = divideProps(restProps as any);
 
-    const resolvedClassName = classNameResolver(styleProps, className);
+    const finalClassName = classNameResolver(styleProps, className);
+    const { style, ...finalOwnProps } = componentOwnProps;
 
-    return <Component {...componentOwnProps} className={resolvedClassName} />;
+    const finalStyle = stylePropResolver?.(styleProps, style) ?? style;
+
+    return <Component
+      {...finalOwnProps}
+      className={finalClassName}
+      style={finalStyle}
+    />;
   };
 }
 

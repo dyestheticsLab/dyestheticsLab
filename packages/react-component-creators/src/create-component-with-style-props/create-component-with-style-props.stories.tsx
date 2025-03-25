@@ -6,7 +6,7 @@ import { expect, within } from '@storybook/test'
 const DivComponent = createComponentWithStyleProps({
   Component: 'div',
   classNameResolver: (_props, className) => className,
-  extractStyleProps: (props) => {
+  divideProps: (props) => {
     const { children, ...styleProps } = props;
     return { styleProps, componentOwnProps: { children } };
   },
@@ -21,7 +21,7 @@ const DivComponentWithClassName = createComponentWithStyleProps<StyleProps, 'div
   classNameResolver: (props) => {
     return `${props.customColor === 'red' ? 'red' : 'blue'}`;
   },
-  extractStyleProps: (props) => {
+  divideProps: (props) => {
     const { customColor, ...ownProps } = props;
     return { styleProps: {customColor}, componentOwnProps: ownProps };
   },
