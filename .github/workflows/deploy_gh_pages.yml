@@ -39,6 +39,23 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           path: gp-pages-repo
 
+
+      - name: Get package version
+        id: get_version
+        run: |
+          PACKAGE_JSON_PATH=apps/docs/package.json
+          VERSION=$(jq -r '.version' $PACKAGE_JSON_PATH)
+          echo "VERSION=$VERSION"
+          echo "version=$VERSION" >> $GITHUB_EN
+
+      - name: Create Git tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v${{ env.version }}-doc"
+          git push origin "v${{ env.version }}-doc"
+
+
       - name: Deploy documentation
         run: |
           cd gp-pages-repo
