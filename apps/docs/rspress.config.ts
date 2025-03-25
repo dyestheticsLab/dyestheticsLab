@@ -2,12 +2,13 @@ import * as path from 'node:path';
 import { defineConfig } from 'rspress/config';
 
 export default defineConfig({
+  globalStyles: path.join(__dirname, 'styles/index.css'),
   root: path.join(__dirname, 'docs'),
   title: 'My Site',
-  icon: '/rspress-icon.png',
+  icon: '/dystopian-eye.webp',
   logo: {
-    light: '/rspress-light-logo.png',
-    dark: '/rspress-dark-logo.png',
+    light: '/dystopian-eye.webp',
+    dark: '/dystopian-eye.webp',
   },
   themeConfig: {
     socialLinks: [
