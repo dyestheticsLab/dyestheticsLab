@@ -1,4 +1,4 @@
-name: Docs GH Pages Deployment
+name: Publish Packages
 
 on:
   workflow_dispatch:
