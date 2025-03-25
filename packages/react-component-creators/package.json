@@ -13,6 +13,7 @@
     }
   },
   "publishConfig": {
+    "access": "public",
     "exports": {
       ".": {
         "import": "./dist/react-component-creators.es.js",
