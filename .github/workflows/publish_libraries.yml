@@ -46,11 +46,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "v${{ env.version }}"
-          git push origin "v${{ env.version }}"
+          git tag -f "v${{ env.version }}"
+          git push -f origin "v${{ env.version }}"
 
       - name: publish
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           pnpm -r publish
