@@ -2,15 +2,15 @@ import { ElementType } from 'react';
 import { CreateComponentWithStyleProps } from "./types";
 
 export default function createComponentWithStyleProps<
-  S extends Record<string, any>,
-  P extends Record<string, any>,
-  C extends ElementType
+  StyleProps extends Record<string, any>,
+  Props extends Record<string, any>,
+  IComponent extends ElementType
 >({
   extractStyleProps,
   classNameResolver,
   Component
-}: CreateComponentWithStyleProps<S, P, C>) {
-  return ({ className, ...props }: P) => {
+}: CreateComponentWithStyleProps<StyleProps, Props, IComponent>) {
+  return ({ className, ...props }: Props) => {
     const { styleProps, componentOwnProps } = extractStyleProps(props);
 
     const resolvedClassName = classNameResolver(styleProps, className);
