@@ -9,7 +9,6 @@
     }
   },
   "publishConfig": {
-    "main": "dist/index.js",
     "exports": {
       ".": {
         "import": "./dist/react-component-creators.es.js",
