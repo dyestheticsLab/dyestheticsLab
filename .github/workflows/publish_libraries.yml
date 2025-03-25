@@ -21,10 +21,13 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           node-version: '22'
           cache: 'pnpm'
           cache-dependency-path: './pnpm-lock.yaml'
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Install dependencies
         run: |
@@ -50,7 +53,6 @@ jobs:
           git push -f origin "v${{ env.version }}"
 
       - name: publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
         run: |
           pnpm -r publish
