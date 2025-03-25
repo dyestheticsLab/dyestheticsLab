@@ -46,7 +46,7 @@ jobs:
           PACKAGE_JSON_PATH=apps/docs/package.json
           VERSION=$(jq -r '.version' $PACKAGE_JSON_PATH)
           echo "VERSION=$VERSION"
-          echo "version=$VERSION" >> $GITHUB_EN
+          echo "version=$VERSION" >> $GITHUB_ENV
 
       - name: Create Git tag
         run: |
