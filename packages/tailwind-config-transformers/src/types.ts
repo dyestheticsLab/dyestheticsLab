@@ -1,5 +1,5 @@
 export interface TransformTailwindConfigArgs {
-  id: string;
-  componentSuffix?: string;
-  configSuffix?: string;
+  componentFileGlob?: string;
+  configFileNameSuffix?: string;
+  keyResolver?: (componentFileGlob?: string, configFileNameSuffix?: string) => string;
 }
