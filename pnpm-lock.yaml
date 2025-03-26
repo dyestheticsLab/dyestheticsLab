@@ -33,6 +33,49 @@ importers:
         specifier: ^8.22.0
         version: 8.28.0(eslint@9.23.0)(typescript@5.8.2)
 
+  experiments/sandbox-vite:
+    dependencies:
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.0(react@19.0.0)
+    devDependencies:
+      '@eslint/js':
+        specifier: ^9.21.0
+        version: 9.23.0
+      '@types/react':
+        specifier: ^19.0.10
+        version: 19.0.12
+      '@types/react-dom':
+        specifier: ^19.0.4
+        version: 19.0.4(@types/react@19.0.12)
+      '@vitejs/plugin-react-swc':
+        specifier: ^3.8.0
+        version: 3.8.1(@swc/helpers@0.5.15)(vite@6.2.3(@types/node@18.19.83)(sass-embedded@1.86.0)(terser@5.39.0))
+      eslint:
+        specifier: ^9.21.0
+        version: 9.23.0
+      eslint-plugin-react-hooks:
+        specifier: ^5.1.0
+        version: 5.2.0(eslint@9.23.0)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.19
+        version: 0.4.19(eslint@9.23.0)
+      globals:
+        specifier: ^15.15.0
+        version: 15.15.0
+      typescript:
+        specifier: ~5.7.2
+        version: 5.7.3
+      typescript-eslint:
+        specifier: ^8.24.1
+        version: 8.28.0(eslint@9.23.0)(typescript@5.7.3)
+      vite:
+        specifier: ^6.2.0
+        version: 6.2.3(@types/node@18.19.83)(sass-embedded@1.86.0)(terser@5.39.0)
+
   packages/react-component-creators:
     dependencies:
       react:
