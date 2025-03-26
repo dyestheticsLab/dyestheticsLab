@@ -1,12 +1,15 @@
 
 export interface KeyResolverArgs {
   componentName: string;
-  componentFilePath: string;
-  configFilePath: string;
+  componentFileNamePath: string;
+  configFileNamePath: string;
+  componentFileNameSuffix: string;
+  configFileNameSuffix: string;
 }
 
 export interface TransformTailwindConfigArgs {
-  componentFileGlob?: string;
+  componentFileGlob: string;
+  componentFileNameSuffix?: string;
   configFileNameSuffix?: string;
   keyResolver?: (args: KeyResolverArgs) => string;
 }
