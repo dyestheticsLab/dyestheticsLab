@@ -24,12 +24,15 @@ const setupConfig = async () => {
   await Promise.all(manifestFilesCreationPromises)
 }
 
-// Run the setup in the background without blocking the config export
-// TODO: Block process until setup is done
-setupConfig().catch(console.error)
 
-const nextConfig: NextConfig = {
-  output: "export"
+// Bloquear el proceso hasta que `setupConfig` termine
+const createNextConfig = async (): Promise<NextConfig> => {
+  await setupConfig();
+
+  return {
+    output: "export",
+  };
 };
 
-export default nextConfig;
+export default createNextConfig
+
