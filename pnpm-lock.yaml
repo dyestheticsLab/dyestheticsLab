@@ -127,6 +127,18 @@ importers:
         specifier: ^19.0.10
         version: 19.0.12
 
+  packages/tailwind-config-transformers:
+    devDependencies:
+      typescript:
+        specifier: ~5.7.2
+        version: 5.7.3
+      vite:
+        specifier: ^6.2.0
+        version: 6.2.3(@types/node@18.19.83)(sass-embedded@1.86.0)(terser@5.39.0)
+      vitest:
+        specifier: ^3.0.9
+        version: 3.0.9(@types/debug@4.1.12)(@types/node@18.19.83)(jsdom@26.0.0)(sass-embedded@1.86.0)(terser@5.39.0)
+
 packages:
 
   '@adobe/css-tools@4.4.2':
