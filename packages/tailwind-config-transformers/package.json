@@ -1,5 +1,5 @@
 {
-  "name": "tailwind-config-transformers",
+  "name": "@dyesthetics-lab/tailwind-config-transformers",
   "private": false,
   "version": "0.0.1",
   "type": "module",
