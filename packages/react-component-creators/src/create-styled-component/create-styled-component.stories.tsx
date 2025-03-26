@@ -4,7 +4,7 @@ import { createStyledComponent } from '.';
 import { expect, within } from '@storybook/test'
 
 
-const Button = createStyledComponent<'button', {appearance: string}>({
+const Button = createStyledComponent<'button', {appearance: 'red' | 'blue' }>({
   Component: 'button',
   divideProps: (props) => {
     const { appearance, ...styleProps } = props;
