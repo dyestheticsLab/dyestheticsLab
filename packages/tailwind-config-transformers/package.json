@@ -3,6 +3,12 @@
   "private": false,
   "version": "0.0.1",
   "type": "module",
+  "main": "./dist/tailwind-config-transformers.es.js",
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public",
     "exports": {
@@ -26,6 +32,6 @@
     "vitest": "^3.0.9"
   },
   "peerDependencies": {
-    "fast-glob": "^3.3.3"
+    "tinyglobby":"^0.2.12"
   }
 }

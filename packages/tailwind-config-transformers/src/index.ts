@@ -1,4 +1,4 @@
-import { glob } from 'fast-glob'
+import { glob } from 'tinyglobby'
 import { basename, extname, resolve } from 'path';
 import { TransformTailwindConfigArgs, TransformTailwindConfigReturn } from './types';
 import { readFile } from 'fs/promises';
@@ -34,7 +34,7 @@ export const createTransformers = async ({
         .replace(componentFileNameSuffix, '')
         .replace(/\.$/, '');
 
-      const configFileNamePath = resolve(entry, `../${configFileNameSuffix}`);
+      const configFileNamePath = resolve(entry, `../${componentName}.${configFileNameSuffix}.json`);
 
       const keyId = keyResolver({
         componentName,

@@ -21,12 +21,12 @@ export interface TransformTailwindConfigArgs {
   globResolver?: (componentsFileGlobs: string | string[]) => Promise<string[]>;
 }
 
-export type VariantCandidateValue = boolean | string | number | undefined
+export type VariantCandidateValue = boolean | string | number | undefined;
 
 export type TailwindClasses = VariantCandidateValue | VariantCandidateValue[];
 
 export interface VariantData {
-  [variantName: string]: TailwindClasses[] | boolean;
+  [variantName: string]: TailwindClasses;
 }
 
 export type VariantResolver = (variants: VariantData) => string;
