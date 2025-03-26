@@ -1,0 +1,10 @@
+{
+  "preset": {
+    "variants": {
+      "appearance": {
+        "primary": ["bg-color-red", "text-color-white"],
+        "secondary": ["bg-color-blue", "text-color-white"]
+      }
+    }
+  }
+}
