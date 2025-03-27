@@ -6,5 +6,8 @@
         "secondary": ["bg-color-blue", "text-color-white"]
       }
     }
+  },
+  "options": {
+    "responsiveVariants": true
   }
 }
