@@ -1,0 +1,244 @@
+import { Tab, Tabs } from 'rspress/theme';
+
+# Component react creators
+
+
+## What does it do?
+These utilities are actually react component factories for what some libraries like
+MUI and Mantine know as [Polymorphic Components](https://mantine.dev/guides/polymorphic/)
+and also to create components that extract some props and use them to resolve the className.
+There is a reason we are creating this; we have some ideas in mind following the
+[article we published in medium](https://medium.com/p/0d7195316741#1045-9740101021bc)
+to create some optimizations in build/compile time.
+
+In short, this means you can create a `Button` that can render not only as a `button` but as any
+other React `ElementType`.
+
+Also you are going to be able to create a className resolver function that extracts
+from your props what info is needed to create a className according to, for instance, some variants
+of your component, and separate them from the real props of the component.
+
+I almost forgot to mention that it is typesafe, so your IDE is going to autocomplete the needed props.
+
+> **⚠️ WARNING**: This library is only compatible with React 19. It will not work with earlier versions of React due to dependency on new features and APIs introduced in React 19.
+
+## Installation
+
+
+<Tabs>
+  <Tab label="pnpm">
+
+```bash
+pnpm add @dyesthetics-lab/react-component-creators
+```
+  </Tab>
+
+  <Tab label="npm">
+
+```bash
+npm install @dyesthetics-lab/react-component-creators
+```
+  </Tab>
+</Tabs>
+
+## Usage
+
+## Creating a styled component
+
+This is a factory of a polymorphic component that also accepts variant props for your custom className
+resolver
+
+```tsx title="Button.tsx"
+import { createStyledComponent } from '@dyesthetics-lab/react-component-creators';
+
+export interface ButtonProps {
+  appearance: 'red' | 'blue';
+}
+
+export const Button = createStyledComponent<'button', ButtonProps>({
+  Component: 'button',
+  divideProps: (props) => {
+    const { appearance, ...styleProps } = props;
+
+    return {
+      styleProps: {appearance},
+      componentOwnProps: styleProps
+    };
+  },
+  classNameResolver: (styleProps) => {
+    return styleProps.appearance === 'red' ? 'red' :'blue';
+  }
+});
+
+
+```
+The `extractStyleProps` is a needed function to separate what props are real props
+of your component (`componentOwnProps`) and what props are going to be used to resolve the className
+(`styleProps`).
+
+The `classNameResolver` will only get what you defined in `extractStyleProps` as `styleProps` and
+you may use that to form your final className to get the correct styles.
+
+Sometimes you would want not to modify the className but the style prop, this is to
+apply change control via css vars; for those cases we provide a styleResolver function.
+
+```tsx title="Button.tsx"
+
+import { createStyledComponent } from '@dyesthetics-lab/react-component-creators';
+import "./styles.css"
+
+export interface ButtonProps {
+  appearance: 'red' | 'blue';
+}
+
+export const Button = createStyledComponent<'button', ButtonProps>({
+  Component: 'button',
+  divideProps: (props) => {
+    const { appearance, ...styleProps } = props;
+
+    return {
+      styleProps: {appearance},
+      componentOwnProps: styleProps
+    };
+  },
+  stylePropResolver: (styleProps) => {
+    return {
+      '--color': styleProps.appearance'
+    };
+  }
+});
+
+```
+
+```css title="styles.css"
+.button {
+  color: var(--color);
+}
+```
+
+In any case, you can use the `Button` component like this:
+
+```tsx title="App.tsx"
+import { Button } from './Button';
+
+
+export const App = () => {
+  return (
+    <Button appearance="red" as="a" href="#">
+      Click me
+    </Button>
+  )
+}
+```
+
+### Example with tailwindVariants and Rambda
+
+```tsx title="Button.tsx"
+import { createStyledComponent } from '@dyesthetics-lab/react-component-creators';
+import { tv } from 'tailwind-variants';
+import { pick, omit } from 'ramda';
+
+export interface ButtonProps {
+  appearance: 'red' | 'blue';
+}
+
+const variants = {
+  appearance: {
+    red: 'text-red-500',
+    blue: 'text-blue-500',
+  }
+}
+
+const button = tv({
+  variants
+})
+
+const variantsKeys = Object.keys(variants);
+
+const createPropsByVariants = (variants: string[])=>(props)=>{
+  return {
+    styleProps: pick(variants, props),
+    componentOwnProps: omit(variants, props)
+  }
+}
+
+export const Button = createStyledComponent<'button', ButtonProps>({
+  Component: 'button',
+  divideProps: createPropsByVariants(variantsKeys),
+  classNameResolver: button
+});
+
+```
+
+Then you can use your shiny button like this
+
+```tsx title="App.tsx"
+import { Button } from './Button';
+
+
+export const App = () => {
+  return (
+    <Button appearance="red" as="a" href="#">
+      Click me
+    </Button>
+  )
+}
+```
+
+Why would I want a button that is a link? Well, because sometimes you need the styles of a button
+in an anchor tag.
+
+## Creating a only polymorphic component
+But if you do not want to create a custom className resolver and only need a polymorphic component
+you can use `createReactMetaComponent`
+
+## Creating a component that extracts some props to create the className
+But this time it is not a polymorphic component, you can use `createComponentWithStyleProps`
+and the component is not going to have an `as` prop.
+
+
+```tsx title="Button.tsx"
+
+import { createComponentWithStyleProps } from '@dyesthetics-lab/react-component-creators';
+
+export interface ButtonProps {
+  appearance: 'red' | 'blue';
+}
+
+export const Button = createComponentWithStyleProps<'button', ButtonProps>({
+  Component: 'button',
+  divideProps: (props) => {
+    const { appearance, ...styleProps } = props;
+
+    return {
+      styleProps: {appearance},
+      componentOwnProps: styleProps
+    };
+  },
+  classNameResolver: (styleProps) => {
+    return styleProps.appearance === 'red' ? 'red' :'blue';
+  }
+});
+
+```
+This component is always going to be a button.
+
+## Final words
+
+Obviously you may use directly a classname resolver of your liking directly in any
+component directly in the code like this (suppose we were using tailwindVariants):
+
+```tsx
+
+<button className={button({appearance: 'red'})}>Click me</button>
+
+```
+
+And it is really good, but we wanted to give some structure to react components to make them
+have all your variants by props.
+
+If you read the article about our ideas that came from our adventures in the place where we study,
+you may know we are planning on using a compiler to make some optimizations at build time.
+
+And since react is something that is going to be in our projects, we wanted to make the first
+step in this direction.
