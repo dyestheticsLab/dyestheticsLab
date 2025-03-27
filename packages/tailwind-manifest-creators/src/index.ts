@@ -7,7 +7,7 @@ export interface BatchOptions {
   onError?: (reject: PromiseRejectedResult) => void;
   onSuccess?: (result: string) => void;
   createManifest?: (options: CreateManifestOptions) => Promise<string>;
-  targetPath: string;
+  targetPath?: string;
 }
 
 

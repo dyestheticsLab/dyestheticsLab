@@ -8,5 +8,8 @@
         "tertiary": "bg-yellow-500"
       }
     }
+  },
+  "options": {
+    "responsiveVariants": true
   }
 }

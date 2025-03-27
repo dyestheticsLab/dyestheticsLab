@@ -1,0 +1,165 @@
+# Tailwind Manifest Creators
+
+## Introduction
+
+The `@dyesthetics-lab/tailwind-manifest-creators` package creates manifest files containing all Tailwind CSS class variants used in your project. This manifest enables Tailwind to efficiently process only the classes your application actually needs, improving build performance and reducing CSS bundle size.
+
+## Installation
+
+```bash
+pnpm add @dyesthetics-lab/tailwind-manifest-creators
+```
+
+## Usage
+
+### Manifest Creator
+
+The package exports a `createManifest` function that generates a manifest file containing all Tailwind class variants that match a specified glob pattern.
+
+To implement this in your build process, create a pre-build script file (e.g., `pre-build.ts`):
+
+```ts
+import { createManifest } from '@dyesthetics-lab/tailwind-manifest-creators';
+
+createManifest({
+  globPath: './**/*.tailwindConfig.json',
+});
+```
+
+The `globPath` parameter specifies which files to scan for Tailwind class definitions. In this example, we're searching for all files with the `.tailwindConfig.json` extension.
+
+### Configuration Files
+
+Your project should contain one or more configuration files matching the specified glob pattern. These files define the Tailwind variants your components use.
+
+Example `tailwindConfig.json`:
+
+```json
+{
+  "preset": {
+    "variants": {
+      "appearance": {
+        "default": "bg-red-500",
+        "primary": "bg-blue-500",
+        "secondary": "bg-green-500",
+        "tertiary": "bg-yellow-500"
+      }
+    }
+  },
+  "options": {
+    "responsiveVariants": true
+  }
+}
+```
+
+### Integrating with Your Build Process
+
+Configure the pre-build script in your `package.json`:
+
+```json
+{
+  "scripts": {
+    "prebuild": "pnpx tsx ./src/scripts/pre-build.ts"
+  }
+}
+```
+
+When you run your build process, the pre-build script will execute first, creating a `global.tailwind.manifest` file in `node_modules/.tailwind-manifests/`. This manifest will contain all Tailwind classes found in your configuration files, including responsive variants if specified.
+
+Example manifest content:
+```
+sm:bg-red-500 md:bg-red-500 lg:bg-red-500 sm:bg-blue-500 md:bg-blue-500 lg:bg-blue-500 sm:bg-green-500 md:bg-green-500 lg:bg-green-500 sm:bg-yellow-500 md:bg-yellow-500 lg:bg-yellow-500
+```
+
+### Configuring Tailwind CSS
+
+To tell Tailwind CSS where to find the manifest file, add this directive to your Tailwind configuration:
+
+```js
+@source '../../node_modules/**/*.tailwind.manifest';
+```
+
+### Customizing the Target Path
+
+You can customize where the manifest file is created:
+
+```ts
+import { createManifest } from '@dyesthetics-lab/tailwind-manifest-creators';
+import { join } from 'path';
+
+createManifest({
+  globPath: './**/*.tailwindConfig.json',
+  batchOptions: {
+    targetPath: join(process.cwd(), 'src', 'global.tailwind.manifest'),
+  }
+});
+```
+
+If you customize the target path, make sure to update the path in your Tailwind configuration:
+
+```js
+@source '../../src/global.tailwind.manifest';
+```
+
+## Integration Plugins
+
+The package provides build tool plugins to simplify the integration process.
+
+### Vite Plugin
+
+Configure the plugin in your `vite.config.ts`:
+
+```ts
+import { createVitePlugin } from '@dyesthetics-lab/tailwind-manifest-creators/vite';
+
+export default {
+  plugins: [
+    createVitePlugin()
+  ],
+};
+```
+
+Then add the source directive to your Tailwind configuration:
+
+```js
+@source '../../node_modules/**/*.tailwind.manifest';
+```
+
+### Webpack Plugin
+
+For Next.js projects, configure the plugin in your `next.config.js`:
+
+```js
+import type { NextConfig } from "next";
+
+const createNextConfig = async (): Promise<NextConfig> => {
+  return {
+    webpack(config, {dev}) {
+      if (!dev) {
+        return config;
+      }
+
+      config.module.rules.push({
+        test: /\.tailwindConfig.json$/,
+        use: [
+          {
+            loader: require.resolve("@dyesthetics-lab/tailwind-manifest-creators/manifest-loader"),
+          }
+        ]
+      });
+
+      return config;
+    }
+  };
+};
+
+export default createNextConfig;
+```
+
+Then add the source directive to your Tailwind configuration:
+
+```js
+@source '../../node_modules/**/*.tailwind.manifest';
+```
+
+This approach allows Tailwind to access all the necessary class variants without having to scan your entire codebase, improving build performance and ensuring all dynamically generated classes are properly included in your CSS output.
