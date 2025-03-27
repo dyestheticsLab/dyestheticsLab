@@ -1,19 +1,19 @@
 {
-  "name": "@dyesthetics-lab/tailwind-config-transformers",
+  "name": "@dyesthetics-lab/tailwind-utils",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.0",
   "type": "module",
-  "main": "./dist/tailwind-config-transformers.es.js",
-  "types": "./dist/index.d.ts",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
   "publishConfig": {
     "access": "public",
     "exports": {
       ".": {
-        "import": "./dist/tailwind-config-transformers.es.js",
+        "import": "./dist/index.es.js",
         "types": "./dist/index.d.ts"
       }
     }
@@ -24,14 +24,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@types/node": "^18.11.17",
-    "@vitest/coverage-v8": "3.0.9",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
     "vite-plugin-dts": "^4.5.3",
     "vitest": "^3.0.9"
   },
   "peerDependencies": {
-    "tinyglobby":"^0.2.12"
+    "tailwind-variants": "^1.0.0",
+    "rambda": "^9.0.0"
   }
 }
