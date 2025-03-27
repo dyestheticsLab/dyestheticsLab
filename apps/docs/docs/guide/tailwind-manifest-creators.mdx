@@ -1,14 +1,32 @@
+import { Tab, Tabs } from 'rspress/theme';
+
 # Tailwind Manifest Creators
 
 ## Introduction
 
-The `@dyesthetics-lab/tailwind-manifest-creators` package creates manifest files containing all Tailwind CSS class variants used in your project. This manifest enables Tailwind to efficiently process only the classes your application actually needs, improving build performance and reducing CSS bundle size.
+The `@dyesthetics-lab/tailwind-manifest-creators` package creates manifest files containing all Tailwind CSS class variants used in your project. **A manifest file is a collection of all the Tailwind classes that your application might use, which are extracted from your configuration files.** This manifest enables Tailwind to efficiently process only the classes your application actually needs, improving build performance and reducing CSS bundle size.
+
+> [!WARNING]
+> **This package is specifically designed to work with Tailwind CSS v4, which introduced the @source directive for improved class extraction.**
 
 ## Installation
+
+<Tabs>
+  <Tab label="pnpm">
 
 ```bash
 pnpm add @dyesthetics-lab/tailwind-manifest-creators
 ```
+  </Tab>
+
+  <Tab label="npm">
+
+```bash
+npm install @dyesthetics-lab/tailwind-manifest-creators
+```
+  </Tab>
+</Tabs>
+
 
 ## Usage
 
@@ -52,6 +70,9 @@ Example `tailwindConfig.json`:
 }
 ```
 
+> [!INFO]
+> **Note that the `responsiveVariants` option in your configuration controls whether responsive variants are generated. When set to `true`, the manifest will include responsive variants (like sm:, md:, lg:) for your classes. The tool does not automatically create responsive variants - it generates them based on your configuration.**
+
 ### Integrating with Your Build Process
 
 Configure the pre-build script in your `package.json`:
@@ -73,9 +94,9 @@ sm:bg-red-500 md:bg-red-500 lg:bg-red-500 sm:bg-blue-500 md:bg-blue-500 lg:bg-bl
 
 ### Configuring Tailwind CSS
 
-To tell Tailwind CSS where to find the manifest file, add this directive to your Tailwind configuration:
+To tell Tailwind CSS where to find the manifest file, add this directive to your css entry point:
 
-```js
+```css
 @source '../../node_modules/**/*.tailwind.manifest';
 ```
 
@@ -95,9 +116,9 @@ createManifest({
 });
 ```
 
-If you customize the target path, make sure to update the path in your Tailwind configuration:
+If you customize the target path, make sure to update the path in your css entry point:
 
-```js
+```css
 @source '../../src/global.tailwind.manifest';
 ```
 
@@ -119,9 +140,9 @@ export default {
 };
 ```
 
-Then add the source directive to your Tailwind configuration:
+Then add the source directive to your css entry point:
 
-```js
+```css
 @source '../../node_modules/**/*.tailwind.manifest';
 ```
 
@@ -156,9 +177,9 @@ const createNextConfig = async (): Promise<NextConfig> => {
 export default createNextConfig;
 ```
 
-Then add the source directive to your Tailwind configuration:
+Then add the source directive to your css entry point:
 
-```js
+```css
 @source '../../node_modules/**/*.tailwind.manifest';
 ```
 
