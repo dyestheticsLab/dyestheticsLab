@@ -2,11 +2,11 @@
   "preset": {
     "variants": {
       "appearance": {
-        "primary": ["bg-color-red", "text-color-white"],
-        "secondary": ["bg-color-blue", "text-color-white"]
+        "primary": ["p-2"]
       }
     }
   },
+  "breakpoints": ["sm", "lg"],
   "options": {
     "responsiveVariants": true
   }

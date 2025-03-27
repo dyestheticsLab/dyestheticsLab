@@ -38,9 +38,6 @@ const plugin: () => Promise<Plugin> = async () => {
     },
   })
 
-  console.log(transformers.get('Button')?.({
-    appearance: 'primary'
-  }))
 
   return {
     name: 'transform-tailwind-config',
