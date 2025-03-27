@@ -4,8 +4,8 @@ import { DynamicVariants } from "../types";
 
 export interface TVROptions<T extends Parameters<TV>[0], breakpoints extends string> {
   preset: T;
-  responsiveVariants: Record<keyof T, boolean> | boolean;
-  breakpoints: breakpoints[]
+  responsiveVariants?: Record<keyof T, boolean> | boolean;
+  breakpoints?: breakpoints[]
 }
 
 type TransformNestedKeys<T> = {
@@ -30,7 +30,7 @@ export function tvr<T extends Parameters<TV>[0], breakpoints extends string>({
     variants
     : Object.fromEntries(
       Object
-        .keys(responsiveVariants)
+        .keys(responsiveVariants!)
         .map(variant => [variant, variants[variant]])
     )
 

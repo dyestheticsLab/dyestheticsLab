@@ -21,13 +21,15 @@ export function createStyledComponent<
   Component: InitialComponent,
   classNameResolver,
   divideProps,
-  stylePropResolver
+  stylePropResolver,
+  defaultProps
 }: CreateStyledComponentOptions<DefaultElement, StyledProps, ComponentProps>) {
   return function Component<RealElementType extends ElementType = DefaultElement>(
     props: MetaReactElementProps<RealElementType, ComponentProps> & Record<string, unknown>
   ) {
-    const { as, className, ...restProps } = props;
-    const Component = componentResolver?.(props) ?? as ?? InitialComponent;
+    const newProps =  {...defaultProps, ...props}
+    const { as, className, ...restProps } = newProps;
+    const Component = componentResolver?.(newProps) ?? as ?? InitialComponent;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { styleProps, componentOwnProps } = divideProps(restProps as any);
 
