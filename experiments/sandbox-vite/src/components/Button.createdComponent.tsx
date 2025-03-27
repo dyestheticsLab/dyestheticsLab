@@ -1,18 +1,16 @@
 import { createStyledComponent } from "@dyesthetics-lab/react-component-creators";
-import { tv, VariantProps } from "tailwind-variants";
-import { preset } from './Button.tailwindConfig.json'
+import {  VariantProps } from "tailwind-variants";
+import { preset, options } from './Button.tailwindConfig.json'
+import { tvr, dividePropsByVariants } from "@dyesthetics-lab/tailwind-utils";
 
-const button = tv(preset)
+const { cnResolver:button, responsiveVariantsNames } = tvr({
+  preset,
+  breakpoints: ["sm"],
+  responsiveVariants: options.responsiveVariants
+})
 
 export const Button = createStyledComponent<'button', VariantProps<typeof button>>({
   classNameResolver: button,
   Component: 'button',
-  divideProps({appearance, ...restProps}){
-    return {
-      componentOwnProps: restProps,
-      styleProps: {
-        appearance
-      }
-    }
-  }
+  divideProps: dividePropsByVariants(responsiveVariantsNames)
 });
