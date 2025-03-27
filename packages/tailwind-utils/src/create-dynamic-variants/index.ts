@@ -26,7 +26,7 @@ export function createDynamicVariants<
   prefixes extends string
 >(
   variants: Variants,
-  prefixes: prefixes[],
+  prefixes: prefixes[] = [],
   separator: string = ':'
 ):DynamicVariants<Variants, prefixes> {
   return Object.fromEntries(Object.entries(variants)

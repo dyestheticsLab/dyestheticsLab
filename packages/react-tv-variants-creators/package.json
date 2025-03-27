@@ -1,29 +1,42 @@
 {
-  "name": "sandbox-vite",
-  "private": true,
+  "name": "@dyesthetics-lab/react-tv-variants-creators",
+  "private": false,
   "version": "0.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "import": "./dist/index.es.js",
+        "types": "./dist/index.d.ts"
+      }
+    }
+  },
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@dyesthetics-lab/react-component-creators": "workspace:*",
+    "@dyesthetics-lab/tailwind-utils": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-variants": "^1.0.0",
-    "tailwindcss": "^4.0.16",
-    "@dyesthetics-lab/tailwind-utils": "workspace:*",
-    "@dyesthetics-lab/react-tv-variants-creators": "workspace:*"
+    "@dyesthetics-lab/react-types": "workspace:*"
   },
   "devDependencies": {
-    "@dyesthetics-lab/tailwind-config-transformers": "workspace:*",
-    "@dyesthetics-lab/tailwind-manifest-creators": "workspace:*",
-    "fast-glob": "^3.3.3",
     "@eslint/js": "^9.21.0",
-    "@tailwindcss/vite": "^4.0.16",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
@@ -33,6 +46,7 @@
     "globals": "^15.15.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vite-plugin-dts": "^4.5.3"
   }
 }
