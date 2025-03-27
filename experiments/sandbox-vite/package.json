@@ -14,7 +14,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-variants": "^1.0.0",
-    "tailwindcss": "^4.0.16"
+    "tailwindcss": "^4.0.16",
+    "@dyesthetics-lab/tailwind-utils": "workspace:*"
   },
   "devDependencies": {
     "@dyesthetics-lab/tailwind-config-transformers": "workspace:*",
