@@ -11,6 +11,9 @@ export default defineConfig({
     light: '/dystopian-eye.webp',
     dark: '/dystopian-eye.webp',
   },
+  head: [
+    ['meta', { name: 'keywords', content: 'dyesthetics, dyesthetics lab, desing system, react, tailwind, tailwind variants, tailwind utils, react component creators' }]
+  ],
   themeConfig: {
     socialLinks: [
       {

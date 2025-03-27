@@ -22,7 +22,7 @@ export function createStyledComponent<
   classNameResolver,
   divideProps,
   stylePropResolver,
-  defaultProps
+  defaultProps,
 }: CreateStyledComponentOptions<DefaultElement, StyledProps, ComponentProps>) {
   return function Component<RealElementType extends ElementType = DefaultElement>(
     props: MetaReactElementProps<RealElementType, ComponentProps> & Record<string, unknown>

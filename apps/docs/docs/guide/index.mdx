@@ -1,247 +1,124 @@
-import { Tab, Tabs } from 'rspress/theme';
+# Introduction
 
-# Component react creators
+We are creating several libraries to help us create design systems specially for
+React.js. It is going to be a long road ahead of us.
 
-As of now we have only one utility, we plan to create more, of course, in the following weeks.
+This idea was born when in a university project we were asked to complain
+to several constraints because we asked for a challenge.
 
-This utility is the **react component creators**
+By now we know that there are out there magnificent tools that are evolving
+fast and offer a really good DX, decent performance and portability but they
+did not covered 100% of what we were asked for, like:
 
-## What does it do?
-These utilities are actually react component factories for what some libraries like
-MUI and Mantine know as [Polymorphic Components](https://mantine.dev/guides/polymorphic/)
-and also to create components that extract some props and use them to resolve the className.
-There is a reason we are creating this; we have some ideas in mind following the
-[article we published in medium](https://medium.com/p/0d7195316741#1045-9740101021bc)
-to create some optimizations in build/compile time.
+- Short build times
+- No runtime overhead
+- 90% of css coverage
+- To work with RSC and get the styles inf in runtime (SSR)
+- Good JSX DX
 
-In short, this means you can create a `Button` that can render not only as a `button` but as any
-other React `ElementType`.
+## Projects that inspire us
 
-Also you are going to be able to create a className resolver function that extracts
-from your props what info is needed to create a className according to, for instance, some variants
-of your component, and separate them from the real props of the component.
+While searching for some tools to help us with our project we found
+some really good libraries that we used as inspiration or even
+we build our tools around them, we really thank the open source community
+for your incredible work:
 
-I almost forgot to mention that it is typesafe, so your IDE is going to autocomplete the needed props.
-
-> **⚠️ WARNING**: This library is only compatible with React 19. It will not work with earlier versions of React due to dependency on new features and APIs introduced in React 19.
-
-## Installation
-
-
-<Tabs>
-  <Tab label="pnpm">
-
-```bash
-pnpm add @dyesthetics-lab/react-component-creators
-```
-  </Tab>
-
-  <Tab label="npm">
-
-```bash
-npm install @dyesthetics-lab/react-component-creators
-```
-  </Tab>
-</Tabs>
-
-## Usage
-
-## Creating a styled component
-
-This is a factory of a polymorphic component that also accepts variant props for your custom className
-resolver
-
-```tsx title="Button.tsx"
-import { createStyledComponent } from '@dyesthetics-lab/react-component-creators';
-
-export interface ButtonProps {
-  appearance: 'red' | 'blue';
-}
-
-export const Button = createStyledComponent<'button', ButtonProps>({
-  Component: 'button',
-  divideProps: (props) => {
-    const { appearance, ...styleProps } = props;
-
-    return {
-      styleProps: {appearance},
-      componentOwnProps: styleProps
-    };
-  },
-  classNameResolver: (styleProps) => {
-    return styleProps.appearance === 'red' ? 'red' :'blue';
-  }
-});
+- [Radix](https://www.radix-ui.com/)
+- [Tamagui](https://tamagui.dev/)
+- [Stitches](https://stitches.dev/)
+- [Mantine](https://mantine.dev/)
+- [UnoCSS](https://unocss.dev/)
+- [Tailwind](https://tailwindcss.com/)
+- [Tailwind Variants](https://www.tailwind-variants.org/)
 
 
-```
-The `extractStyleProps` is a needed function to separate what props are real props
-of your component (`componentOwnProps`) and what props are going to be used to resolve the className
-(`styleProps`).
+## Some context...
+For instance, we wanted to use some css variant generator, because you actually
+do not know what variants you are going to need in compile time, all
+the classes representing possible states of that variant were generated
+and the coverage of used css was not accepted by our mentors.
 
-The `classNameResolver` will only get what you defined in `extractStyleProps` as `styleProps` and
-you may use that to form your final className to get the correct styles.
+Then we came upon [Tamagui](https://tamagui.dev/),
+which was wonderful because it offered optimizations reading the jsx
+and extracting the variants and creating a css file with only the classes
+that were used. We love Tamagui.
 
-Sometimes you would want not to modify the className but the style prop, this is to
-apply change control via css vars; for those cases we provide a styleResolver function.
+But then, we needed to use the components as RSC and also the styles
+were not known for those RSC ahead of time, since we were fetching that
+info from a remote data source (we were doing SSR).
 
-```tsx title="Button.tsx"
+And the heuristics to know how to compile a component were going to be
+lost since we do not know which variant value to apply till we are on runtime.
 
-import { createStyledComponent } from '@dyesthetics-lab/react-component-creators';
-import "./styles.css"
+That is why we are building some tolls to help us build up, with luck, a complete
+framework that can address all the constraints we are facing.
 
-export interface ButtonProps {
-  appearance: 'red' | 'blue';
-}
-
-export const Button = createStyledComponent<'button', ButtonProps>({
-  Component: 'button',
-  divideProps: (props) => {
-    const { appearance, ...styleProps } = props;
-
-    return {
-      styleProps: {appearance},
-      componentOwnProps: styleProps
-    };
-  },
-  stylePropResolver: (styleProps) => {
-    return {
-      '--color': styleProps.appearance'
-    };
-  }
-});
-
-```
-
-```css title="styles.css"
-.button {
-  color: var(--color);
-}
-```
-
-In any case, you can use the `Button` component like this:
-
-```tsx title="App.tsx"
-import { Button } from './Button';
+In that context we actually do not aspire to be a replacement of those
+very powerful libraries, we are just experimenting with some ideas
 
 
-export const App = () => {
-  return (
-    <Button appearance="red" as="a" href="#">
-      Click me
-    </Button>
-  )
-}
-```
+## The road ahead
+As for now we are building a library of react component creators and
+around that a tailwind wrapper using tailwind variants (we love tailwind variants)
 
-### Example with tailwindVariants and Rambda
+To make up for the missing responsive variants we are creating a babel loader
+and a vite plugin to create the responsive variants in compile time (all of them).
 
-```tsx title="Button.tsx"
-import { createStyledComponent } from '@dyesthetics-lab/react-component-creators';
-import { tv } from 'tailwind-variants';
-import { pick, omit } from 'ramda';
+As for the next steps we are looking to create a SWC plugin to
+extract only the needed classes from from JSX syntax and transform them in
+optimized components with only the needed tailwind classes.
 
-export interface ButtonProps {
-  appearance: 'red' | 'blue';
-}
+Still the component creator will help us in dev mode meanwhile we are learning
+enough rust to create the plugin.
 
-const variants = {
-  appearance: {
-    red: 'text-red-500',
-    blue: 'text-blue-500',
-  }
-}
+As for the the RSC that hav a data source in runtime, we want to create a
+set of NEXt.js utilities to help us register the needed classes when building in
+SSG mode and use that resolved values to create only the needed classes in CSS file
+and also to inline the critical CSS.
 
-const button = tv({
-  variants
-})
+We know that for client components it is kind of different so we are thinking in
+some way to extract the classes that are going to be passed to the client component
+from the server component, kind of a proxy.
 
-const variantsKeys = Object.keys(variants);
+This approaches will need a strong set of rules and conventions the we need to
+effectively communicate towards warnings and linter rules.
 
-const createPropsByVariants = (variants: string[])=>(props)=>{
-  return {
-    styleProps: pick(variants, props),
-    componentOwnProps: omit(variants, props)
-  }
-}
+As you can see there is a lot of work to do and we are just starting.
 
-export const Button = createStyledComponent<'button', ButtonProps>({
-  Component: 'button',
-  divideProps: createPropsByVariants(variantsKeys),
-  classNameResolver: button
-});
+## What we have so far
 
-```
+We have several packages but the three most usable are:
 
-Then you can use your shiny button like this
+** @dyesthetics-lab/react-component-creators **
+This is our base to create polymorphic components with styles and variants
 
-```tsx title="App.tsx"
-import { Button } from './Button';
+- @dyesthetics-lab/react-tv-variants-creators
+This is a wrapper around tailwind variants and @dyesthetics-lab/react-component-creators
+to create responsive variants, but be careful, this does not work alone
 
+- @dyesthetics-lab/tailwind-manifest-creators
+To effectively create the responsive variants we need to create a manifest
+with all the responsive variants to make tailwindcss read it to generate the
+needed CSS, In this module we have loaders and plugins to helps us do so.
+(We are planning to offer you a codegen cli also to give you an alternative to
+this package)
 
-export const App = () => {
-  return (
-    <Button appearance="red" as="a" href="#">
-      Click me
-    </Button>
-  )
-}
-```
+You can test out our following libraries
+- @dyesthetics-lab/react-component-creators
+- @dyesthetics-lab/react-tv-variants-creators
+- @dyesthetics-lab/tailwind-utils
+- @dyesthetics-lab/tailwind-manifest-creators
+- @dyesthetics-lab/tailwind-utils
 
-Why would I want a button that is a link? Well, because sometimes you need the styles of a button
-in an anchor tag.
-
-## Creating a only polymorphic component
-But if you do not want to create a custom className resolver and only need a polymorphic component
-you can use `createReactMetaComponent`
-
-## Creating a component that extracts some props to create the className
-But this time it is not a polymorphic component, you can use `createComponentWithStyleProps`
-and the component is not going to have an `as` prop.
-
-
-```tsx title="Button.tsx"
-
-import { createComponentWithStyleProps } from '@dyesthetics-lab/react-component-creators';
-
-export interface ButtonProps {
-  appearance: 'red' | 'blue';
-}
-
-export const Button = createComponentWithStyleProps<'button', ButtonProps>({
-  Component: 'button',
-  divideProps: (props) => {
-    const { appearance, ...styleProps } = props;
-
-    return {
-      styleProps: {appearance},
-      componentOwnProps: styleProps
-    };
-  },
-  classNameResolver: (styleProps) => {
-    return styleProps.appearance === 'red' ? 'red' :'blue';
-  }
-});
-
-```
-This component is always going to be a button.
+## Can I help out?
+Of course! We are looking for contributors to help us out with the project. We
+want to learn, but this days we are really busy with the university so be patient
+with if you do not have an answer right away, nevertheless any pr from a fork is going
+to be reviewed in the same week you it is sent.
 
 ## Final words
+We are here to learn, we really appreciate any feedback you can give us.
 
-Obviously you may use directly a classname resolver of your liking directly in any
-component directly in the code like this (suppose we were using tailwindVariants):
-
-```tsx
-
-<button className={button({appearance: 'red'})}>Click me</button>
-
-```
-
-And it is really good, but we wanted to give some structure to react components to make them
-have all your variants by props.
-
-If you read the article about our ideas that came from our adventures in the place where we study,
-you may know we are planning on using a compiler to make some optimizations at build time.
-
-And since react is something that is going to be in our projects, we wanted to make the first
-step in this direction.
+Also we have an [article](https://medium.com/@shadowrunner8095/my-deep-dive-road-creating-a-design-system-component-library-with-tailwind-part-1-0d7195316741)
+that ignited the idea of this project, bu created the libraries in the spur
+of the moment right after the article was published.
