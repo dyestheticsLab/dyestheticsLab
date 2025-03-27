@@ -8,27 +8,27 @@ import { createTransformers } from '@dyesthetics-lab/tailwind-config-transformer
 //@ts-expect-error aas
 import manifestCreators from '@dyesthetics-lab/tailwind-manifest-creators/vite'
 
-const plugin: ()=>Promise<Plugin> = async ()=>{
+const plugin: () => Promise<Plugin> = async () => {
   const transformers = await createTransformers({
     componentsFileGlobs: ['src/components/**/*.createdComponent.tsx'],
     createClassNameResolver({
       preset
-    }){
+    }) {
       const tailwindResolver = tv(preset)
-      return (variants)=>{
+      return (variants) => {
         const variantsWithManyValues = Object
           .entries(variants)
-          .filter(([_key, value])=>Array.isArray(value))
-          .flatMap(([key, value])=>(value as string[])?.map(singleValue=>[key, singleValue]))
+          .filter(([_key, value]) => Array.isArray(value))
+          .flatMap(([key, value]) => (value as string[])?.map(singleValue => [key, singleValue]))
 
 
         const variantsWithSingleValue = Object.fromEntries(Object
           .entries(variants)
-          .filter(([_key, value])=>!Array.isArray(value))
+          .filter(([_key, value]) => !Array.isArray(value))
         )
 
-        if(variantsWithManyValues.length)
-          return variantsWithManyValues.map(([variantName, value])=>tailwindResolver({
+        if (variantsWithManyValues.length)
+          return variantsWithManyValues.map(([variantName, value]) => tailwindResolver({
             [variantName]: value,
             ...variantsWithSingleValue
           })).join(' ')
