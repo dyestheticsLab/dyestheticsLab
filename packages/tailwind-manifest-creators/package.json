@@ -1,0 +1,61 @@
+{
+  "name": "@dyesthetics-lab/tailwind-manifest-creators",
+  "private": false,
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/manifest-creators.es.js",
+      "require": "./dist/manifest-creators.cjs"
+    },
+    "./manifest-loader": {
+      "import": "./dist/manifest-loaders.es.js",
+      "require": "./dist/manifest-loaders.cjs"
+    },
+    "./vite": {
+      "import": "./dist/vite-plugin.es.js"
+    },
+    "./generate-responsive-variants": {
+      "import": "./dist/generate-responsive-variants.es.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "import": "./dist/manifest-creators.es.js",
+        "require": "./dist/manifest-creators.cjs"
+      },
+      "./manifest-loader": {
+        "import": "./dist/manifest-loaders.es.js",
+        "require": "./dist/manifest-loaders.cjs"
+      },
+      "./vite": {
+        "import": "./dist/vite-plugin.es.js"
+      },
+      "./generate-responsive-variants": {
+        "import": "./dist/generate-responsive-variants.es.js"
+      }
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.13",
+    "@types/webpack": "^5.28.5",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0",
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.0.9"
+  },
+  "peerDependencies": {
+    "tinyglobby": "^0.2.12"
+  }
+}

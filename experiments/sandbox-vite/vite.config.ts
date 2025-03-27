@@ -5,9 +5,8 @@ import tailwindcss from '@tailwindcss/vite'
 import { tv } from 'tailwind-variants'
 import { createTransformers } from '@dyesthetics-lab/tailwind-config-transformers'
 
-
-
-
+//@ts-expect-error aas
+import manifestCreators from '@dyesthetics-lab/tailwind-manifest-creators/vite'
 
 const plugin: ()=>Promise<Plugin> = async ()=>{
   const transformers = await createTransformers({
@@ -50,6 +49,7 @@ const plugin: ()=>Promise<Plugin> = async ()=>{
 
 export default defineConfig({
   plugins: [
+    manifestCreators(),
     plugin(),
     react(),
     tailwindcss(),
