@@ -18,7 +18,7 @@ export default defineConfig(({
       formats: ['es']
     },
     rollupOptions: {
-      external: ['fast-glob', 'path', 'fs/promises'],
+      external: ['path', 'fs/promises', 'tinyglobby'],
     }
   },
   test: {
