@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@dyesthetics-lab/tailwind-config-transformers": "workspace:*",
+    "@dyesthetics-lab/tailwind-manifest-creators": "workspace:*",
     "fast-glob": "^3.3.3",
     "@eslint/js": "^9.21.0",
     "@tailwindcss/vite": "^4.0.16",

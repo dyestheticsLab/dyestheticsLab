@@ -1,11 +1,12 @@
 import { glob } from 'tinyglobby'
 import { batchExecutor } from './batch-executer';
+import { CreateManifestOptions } from './default-create-manifest';
 
 export interface BatchOptions {
   batchSize?: number;
   onError?: (reject: PromiseRejectedResult) => void;
   onSuccess?: (result: string) => void;
-  createManifest?: (entry: string) => Promise<string>;
+  createManifest?: (options: CreateManifestOptions) => Promise<string>;
   targetPath: string;
 }
 
@@ -25,3 +26,5 @@ export async function createManifest({
 
   return batchExecutor(entries, batchOptions)
 }
+
+
