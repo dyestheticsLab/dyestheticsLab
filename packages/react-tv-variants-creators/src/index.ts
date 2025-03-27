@@ -10,7 +10,7 @@ export type  TailwindComponentConfig<
 > = {
   name?: string;
   preset: T
-  options: {
+  options?: {
     responsiveVariants?: boolean | Record<keyof T, boolean>;
     defaultProps?: Partial<VariantProps<T['variants']> & ComponentProps<Tag>>;
   };
@@ -19,13 +19,13 @@ export type  TailwindComponentConfig<
 }
 
 
-export function createCustomStyled<Component extends keyof JSX.IntrinsicElements, T extends Parameters<TV>[0], breakpoints extends string = string>({
+export function createResponsiveStyled<Component extends keyof JSX.IntrinsicElements, T extends Parameters<TV>[0], breakpoints extends string = string>({
   preset, options, breakpoints, tag
 }: TailwindComponentConfig<Component, T, breakpoints>){
   const {cnResolver, responsiveVariantsNames} = tvr<T, breakpoints>({
     preset,
     breakpoints,
-    responsiveVariants: options.responsiveVariants
+    responsiveVariants: options?.responsiveVariants
   })
 
   return createStyledComponent({

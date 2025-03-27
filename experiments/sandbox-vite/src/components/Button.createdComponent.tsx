@@ -2,7 +2,7 @@ import { createStyledComponent } from "@dyesthetics-lab/react-component-creators
 import { VariantProps } from "tailwind-variants";
 import buttonConfig from './Button.tailwindConfig.json'
 import { tvr, dividePropsByVariants } from "@dyesthetics-lab/tailwind-utils";
-import { TailwindComponentConfig, createCustomStyled } from "@dyesthetics-lab/react-tv-variants-creators";
+import { TailwindComponentConfig, createResponsiveStyled } from "@dyesthetics-lab/react-tv-variants-creators";
 const {preset, options } = buttonConfig
 
 
@@ -20,8 +20,27 @@ export const Button = createStyledComponent<'button', VariantProps<typeof button
 });
 
 
-const ButtonCusom = createCustomStyled<'button', typeof preset>(
+const ButtonCusom = createResponsiveStyled<'button', typeof preset>(
   buttonConfig as unknown as TailwindComponentConfig<'button', typeof preset>
 );
+
+const A = createResponsiveStyled({
+  tag: 'button',
+  preset: {
+    variants: {
+      size: {
+        sm: "text-sm",
+        md: "text-base",
+        lg: "text-lg",
+      },
+      color: {
+        primary: "bg-blue-500 text-white",
+        secondary: "bg-gray-500 text-black",
+      },
+    },
+  },
+  breakpoints: ["sm", "lg"],
+});
+
 
 console.log(ButtonCusom)
