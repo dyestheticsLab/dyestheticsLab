@@ -5,7 +5,7 @@ import { tvr, dividePropsByVariants } from "@dyesthetics-lab/tailwind-utils";
 
 const { cnResolver:button, responsiveVariantsNames } = tvr({
   preset,
-  breakpoints: ["sm"],
+  breakpoints: ["sm", "lg"],
   responsiveVariants: options.responsiveVariants
 })
 
@@ -14,3 +14,4 @@ export const Button = createStyledComponent<'button', VariantProps<typeof button
   Component: 'button',
   divideProps: dividePropsByVariants(responsiveVariantsNames)
 });
+

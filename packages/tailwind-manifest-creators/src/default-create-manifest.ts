@@ -18,6 +18,7 @@ export interface CreateManifestOptions {
   targetPath: string;
   flag?: string;
   source?: string;
+  forceBreakpoints?: string[]
 }
 
 export async function createManifest(
@@ -25,10 +26,11 @@ export async function createManifest(
     entry,
     targetPath,
     flag = 'a',
-    source
+    source,
+    forceBreakpoints
   }: CreateManifestOptions): Promise<string> {
-
-  const candidates = source ? generateResponsiveVariants(JSON.parse(source).preset)
+  const { preset, options, breakpoints } = JSON.parse(source ?? "{}")
+  const candidates = source ? generateResponsiveVariants(preset, options, forceBreakpoints ?? breakpoints)
     : await generateCandidates(entry)
 
   await mkdir(dirname(targetPath), { recursive: true })

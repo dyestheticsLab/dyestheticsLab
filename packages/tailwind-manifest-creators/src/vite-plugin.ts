@@ -13,7 +13,7 @@ export interface  ManifestCreatorVitePluginOptions extends BaseLoaderOptions{
 
 const tailwindManifestCreator: ManifestCreatorVitePlugin = function (options){
   const {
-    flag,
+    flag = 'w',
     targetPath,
     targetPathResolver = defaultTargetPathResolver,
     activeForProd,
@@ -29,10 +29,8 @@ const tailwindManifestCreator: ManifestCreatorVitePlugin = function (options){
         new RegExp(`.${tailwindConfigFilesSuffix}.json$`)
         : tailwindConfigFilesSuffix;
       const isTailwindJson = regexpForConfigFiles.exec(id)
-      console.log(id.includes('.json'))
-      console.log({isTailwindJson})
+
       if(isTailwindJson){
-        console.log('hel;ooooooo')
         await createManifest({
           source:code,
           entry: id,
