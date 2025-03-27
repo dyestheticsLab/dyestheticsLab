@@ -5,9 +5,13 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pnpm --filter @dyesthetics-lab/* build"
+    "build": "pnpm --filter @dyesthetics-lab/* build",
+    "changeset": "changeset"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@changesets/cli": "^2.28.1"
+  }
 }
