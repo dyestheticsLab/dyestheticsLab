@@ -30,6 +30,7 @@
     "vitest": "^3.0.9"
   },
   "peerDependencies": {
-    "tailwind-variants": "^1.0.0"
+    "tailwind-variants": "^1.0.0",
+    "rambda": "^9.0.0"
   }
 }

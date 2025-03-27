@@ -3,7 +3,7 @@ import { tvr } from ".";
 
 describe('tailwind variants with responsive', ()=>{
   it('adds responsive variants', ()=>{
-    const padding = tvr({
+    const { cnResolver: padding } = tvr({
       breakpoints: ['sm'],
       preset: {
         variants: {
