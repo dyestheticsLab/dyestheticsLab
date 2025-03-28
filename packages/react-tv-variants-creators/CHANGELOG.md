@@ -1,5 +1,11 @@
 # @dyesthetics-lab/react-tv-variants-creators
 
+## 1.2.0
+
+### Minor Changes
+
+- Added assertion type
+
 ## 1.1.0
 
 ### Minor Changes

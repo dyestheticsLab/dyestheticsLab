@@ -1,4 +1,4 @@
-import { tvr, dividePropsByVariants } from "@dyesthetics-lab/tailwind-utils";
+import { tvr, dividePropsByVariants, DynamicVariants } from "@dyesthetics-lab/tailwind-utils";
 import { ComponentProps, ElementType, JSX } from "react";
 import { TV, VariantProps } from "tailwind-variants";
 import {  createStyledComponent } from "@dyesthetics-lab/react-component-creators"
@@ -58,7 +58,7 @@ export function createResponsiveStyled<Component extends keyof JSX.IntrinsicElem
   divideProps,
   stylePropResolver
 }: TailwindComponentConfig<Component, T, breakpoints>){
-  const {cnResolver, responsiveVariantsNames} = tvr<T, breakpoints>({
+  const {cnResolver, responsiveVariantsNames} = tvr({
     preset,
     breakpoints,
     responsiveVariants: options?.responsiveVariants
@@ -78,5 +78,5 @@ export function createResponsiveStyled<Component extends keyof JSX.IntrinsicElem
     defaultProps: options.defaultProps,
     stylePropResolver: !stylePropResolver? undefined : (...args)=>stylePropResolver(responsiveVariantsNames, ...args),
     componentResolver: componentResolver
-  });
+  }) as ReturnType<typeof createStyledComponent<Component, DynamicVariants<VariantProps<T['variants']>, breakpoints>>>;
 }
