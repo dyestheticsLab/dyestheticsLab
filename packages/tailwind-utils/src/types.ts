@@ -1,5 +1,5 @@
-export type DynamicVariants<T, Variants extends string> = T & {
-  [K in keyof T as `${Variants & string}${Capitalize<string & K>}`]: T[K];
+export type DynamicVariants<T, suffixes extends string> = T & {
+  [K in keyof T as `${suffixes & string}${Capitalize<string & K>}`]: T[K];
 };
 
 
