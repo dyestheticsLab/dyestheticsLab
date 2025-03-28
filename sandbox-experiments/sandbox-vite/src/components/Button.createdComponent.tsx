@@ -20,24 +20,3 @@ export const Button = createStyledComponent<'button', VariantProps<typeof button
 });
 
 
-const A = createResponsiveStyled({
-  tag: 'button',
-  preset: {
-    variants: {
-      size: {
-        sm: "text-sm",
-        md: "text-base",
-        lg: "text-lg",
-      },
-      color: {
-        primary: "bg-blue-500 text-white",
-        secondary: "bg-gray-500 text-black",
-      },
-    },
-  },
-  breakpoints: ["sm", "lg"],
-  responsiveVariants: {
-    size: true
-  }
-});
-
