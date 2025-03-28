@@ -29,11 +29,13 @@ export type  TailwindComponentConfig<
     className?: string
   ): string | undefined,
   componentResolver?(
-    props: ComponentProps<Tag>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    props: ComponentProps<Tag> & Record<string, any> & {as?: ElementType}
   ): ElementType,
   divideProps?(
     responsiveVariants: string[],
-    props: Omit<ComponentProps<Tag> & VariantProps<T['variants']>, 'className'>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    props: Omit<ComponentProps<Tag> & VariantProps<T['variants']>, 'className'> & Record<string, any> & {as?: ElementType}
   ):{
     styleProps: VariantProps<T['variants']>,
     componentOwnProps: Omit<ComponentProps<Tag>, 'className'>
