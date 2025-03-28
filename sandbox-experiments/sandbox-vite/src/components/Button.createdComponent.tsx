@@ -20,7 +20,7 @@ export const Button = createStyledComponent<'button', VariantProps<typeof button
 });
 
 
-const ButtonCusom = createResponsiveStyled<'button', typeof preset>(
+const ButtonCusom = createResponsiveStyled(
   buttonConfig as unknown as TailwindComponentConfig<'button', typeof preset>
 );
 
@@ -41,5 +41,7 @@ const A = createResponsiveStyled({
   },
   breakpoints: ["sm", "lg"],
 });
+
+
 
 console.log(ButtonCusom)

@@ -58,11 +58,13 @@ export function createResponsiveStyled<Component extends keyof JSX.IntrinsicElem
   divideProps,
   stylePropResolver
 }: TailwindComponentConfig<Component, T, breakpoints>){
+  const { responsiveVariants } = options ?? {}
   const {cnResolver, responsiveVariantsNames} = tvr({
     preset,
     breakpoints,
-    responsiveVariants: options?.responsiveVariants
+    responsiveVariants: responsiveVariants
   })
+
 
   return createStyledComponent({
     //@ts-expect-error type is ok
@@ -78,5 +80,8 @@ export function createResponsiveStyled<Component extends keyof JSX.IntrinsicElem
     defaultProps: options.defaultProps,
     stylePropResolver: !stylePropResolver? undefined : (...args)=>stylePropResolver(responsiveVariantsNames, ...args),
     componentResolver: componentResolver
-  }) as ReturnType<typeof createStyledComponent<Component, DynamicVariants<VariantProps<T['variants']>, breakpoints>>>;
+  }) as ReturnType<typeof createStyledComponent<
+    Component,
+    typeof responsiveVariants extends true? DynamicVariants<VariantProps<T['variants']>, breakpoints> : VariantProps<T['variants']>
+  >>;
 }
