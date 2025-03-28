@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div>
-      <Button>Hello</Button>
+      <Button appearance='primary' >Hello</Button>
     </div>
   )
 }

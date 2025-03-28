@@ -78,6 +78,7 @@ export function createResponsiveStyled<
     responsiveVariants
   });
 
+  console.log(responsiveVariantsNames, preset)
 
   return createStyledComponent({
     //@ts-expect-error type is ok
@@ -88,7 +89,7 @@ export function createResponsiveStyled<
     ,
     Component: tag as Component,
     //@ts-expect-error type is ok
-    divideProps: !divideProps? dividePropsByVariants(responsiveVariantsNames):(...args)=>divideProps(responsiveVariantsNames, ...args),
+    divideProps: !divideProps? dividePropsByVariants(responsiveVariantsNames.concat(Object.keys(preset.variants))):(...args)=>divideProps(responsiveVariantsNames, ...args),
     defaultProps: defaultProps,
     //@ts-expect-error type is ok
     stylePropResolver: !stylePropResolver? undefined : (...args)=>stylePropResolver(responsiveVariantsNames, ...args),
