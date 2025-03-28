@@ -1,5 +1,16 @@
 # @dyesthetics-lab/react-tv-variants-creators
 
+## 6.0.0
+
+### Minor Changes
+
+- Fixed typings
+
+### Patch Changes
+
+- Updated dependencies
+  - @dyesthetics-lab/tailwind-utils@0.6.0
+
 ## 5.0.0
 
 ### Minor Changes
