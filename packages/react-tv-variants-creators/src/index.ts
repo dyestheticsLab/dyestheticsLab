@@ -1,6 +1,5 @@
-import { tvr, dividePropsByVariants } from "@dyesthetics-lab/tailwind-utils";
+import { tvr, dividePropsByVariants, DynamicVariants } from "@dyesthetics-lab/tailwind-utils";
 import { ComponentProps, ElementType, JSX } from "react";
-import { TV, VariantProps } from "tailwind-variants";
 import {  createStyledComponent } from "@dyesthetics-lab/react-component-creators"
 
 export { dividePropsByVariants }
@@ -9,23 +8,25 @@ export interface CnBaseResolver<StyleProps> {
   (styleProps: StyleProps, className?: string): string | undefined
 }
 
+export type ExtractVariants<T extends RecordInRecord> = {
+  [K in  keyof T]?: keyof T[K]
+}
 
 export type  TailwindComponentConfig<
   Tag extends keyof JSX.IntrinsicElements,
-  T extends Pick<Parameters<TV>[0], 'variants'>,
-  breakpoints extends string = string
+  T extends RecordInRecord,
+  ResponsiveVariants extends boolean | Partial<Record<keyof T , boolean>> | undefined,
+  breakpoints extends string = string,
 > = {
   name?: string;
-  preset: T
-  options?: {
-    responsiveVariants?: boolean | Record<keyof T, boolean>;
-    defaultProps?: Partial<VariantProps<T['variants']> & ComponentProps<Tag>>;
-  };
+  preset:IPreset<T>
+  responsiveVariants?: ResponsiveVariants;
+  defaultProps?: Partial<ExtractVariants<T> & ComponentProps<Tag>>;
   breakpoints?: breakpoints[];
   tag?: Tag;
   classNameResolver?(
-    tvrCnResolver:CnBaseResolver<VariantProps<T['variants']>>,
-    styleProps: VariantProps<T['variants']>,
+    tvrCnResolver:CnBaseResolver<ExtractVariants<T>>,
+    styleProps: DynamicVariants<ExtractVariants<T>, breakpoints>,
     className?: string
   ): string | undefined,
   componentResolver?(
@@ -35,34 +36,48 @@ export type  TailwindComponentConfig<
   divideProps?(
     responsiveVariants: string[],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    props: Omit<ComponentProps<Tag> & VariantProps<T['variants']>, 'className'> & Record<string, any> & {as?: ElementType}
+    props: Omit<ComponentProps<Tag> & ExtractVariants<T>, 'className'> & Record<string, any> & {as?: ElementType}
   ):{
-    styleProps: VariantProps<T['variants']>,
+    styleProps: DynamicVariants<ExtractVariants<T>, breakpoints>,
     componentOwnProps: Omit<ComponentProps<Tag>, 'className'>
   };
   stylePropResolver?(
     responsiveVariants: string[],
-    styleProps: VariantProps<T['variants']>,
+    styleProps: DynamicVariants<ExtractVariants<T>, breakpoints>,
     style: React.CSSProperties
   ): React.CSSProperties;
 }
 
+export type RecordInRecord = Record<string, Record<string, string | string []>>
+export interface IPreset<T extends RecordInRecord> {
+  variants?: T,
+  base?: string[]
+}
 
-export function createResponsiveStyled<Component extends keyof JSX.IntrinsicElements, T extends Parameters<TV>[0], breakpoints extends string = string>({
+
+export function createResponsiveStyled<
+  Component extends keyof JSX.IntrinsicElements,
+  T extends RecordInRecord,
+  ResponsiveVariants extends boolean | Partial<Record<keyof T, boolean>> | undefined = undefined,
+  breakpoints extends string = string,
+>({
   preset,
-  options,
+  defaultProps,
+  responsiveVariants,
   breakpoints,
   tag,
   classNameResolver,
   componentResolver,
   divideProps,
   stylePropResolver
-}: TailwindComponentConfig<Component, T, breakpoints>){
-  const {cnResolver, responsiveVariantsNames} = tvr<T, breakpoints>({
+}: TailwindComponentConfig<Component, T, ResponsiveVariants, breakpoints>){
+
+  const {cnResolver, responsiveVariantsNames} = tvr({
     preset,
     breakpoints,
-    responsiveVariants: options?.responsiveVariants
-  })
+    responsiveVariants
+  });
+
 
   return createStyledComponent({
     //@ts-expect-error type is ok
@@ -74,9 +89,25 @@ export function createResponsiveStyled<Component extends keyof JSX.IntrinsicElem
     Component: tag as Component,
     //@ts-expect-error type is ok
     divideProps: !divideProps? dividePropsByVariants(responsiveVariantsNames):(...args)=>divideProps(responsiveVariantsNames, ...args),
+    defaultProps: defaultProps,
     //@ts-expect-error type is ok
-    defaultProps: options.defaultProps,
     stylePropResolver: !stylePropResolver? undefined : (...args)=>stylePropResolver(responsiveVariantsNames, ...args),
     componentResolver: componentResolver
-  });
+  }) as ReturnType<typeof createStyledComponent<
+    Component,
+    Partial<ResponsiveVariants extends undefined?
+      ExtractVariants<T>:
+    ResponsiveVariants extends true?
+      DynamicVariants<ExtractVariants<T>, breakpoints>
+      : ResponsiveVariants extends Partial<Record<keyof T, boolean>>?
+      DynamicVariants<PickResponsiveVariants<T, ResponsiveVariants>, breakpoints>
+      : ExtractVariants<T>>
+  >>;
 }
+
+type PickResponsiveVariants<
+  Variants,
+  ResponsiveVariants extends Partial<Record<keyof Variants, boolean>>
+> = {
+  [K in keyof ResponsiveVariants as ResponsiveVariants[K] extends true ? K : never]: K extends keyof Variants ? Variants[K] : never;
+};

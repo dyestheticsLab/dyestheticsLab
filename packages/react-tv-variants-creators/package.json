@@ -1,11 +1,12 @@
 {
   "name": "@dyesthetics-lab/react-tv-variants-creators",
   "private": false,
-  "version": "1.1.0",
+  "version": "2.0.0",
   "license": "MIT",
   "exports": {
     ".": {
-      "import": "./src/index.ts"
+      "import": "./dist/index.es.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "publishConfig": {

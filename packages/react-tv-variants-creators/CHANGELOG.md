@@ -1,5 +1,28 @@
 # @dyesthetics-lab/react-tv-variants-creators
 
+## 2.0.0
+
+### Minor Changes
+
+- fixed response typings
+
+### Patch Changes
+
+- Updated dependencies
+  - @dyesthetics-lab/tailwind-utils@0.2.0
+
+## 1.3.0
+
+### Minor Changes
+
+- Fixed typings
+
+## 1.2.0
+
+### Minor Changes
+
+- Added assertion type
+
 ## 1.1.0
 
 ### Minor Changes
