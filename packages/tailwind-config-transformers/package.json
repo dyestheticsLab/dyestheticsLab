@@ -1,7 +1,7 @@
 {
   "name": "@dyesthetics-lab/tailwind-config-transformers",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.1.0",
   "type": "module",
   "main": "./dist/tailwind-config-transformers.es.js",
   "types": "./dist/index.d.ts",
@@ -32,6 +32,6 @@
     "vitest": "^3.0.9"
   },
   "peerDependencies": {
-    "tinyglobby":"^0.2.12"
+    "tinyglobby": "^0.2.12"
   }
 }
