@@ -1,4 +1,4 @@
 packages:
   - 'packages/*'
   - 'apps/*'
-  - 'experiments/*'
+  - 'sandbox-experiments/*'
