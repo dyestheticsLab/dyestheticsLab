@@ -4,7 +4,7 @@ import { DynamicVariants } from "../types";
 
 export interface TVROptions<T extends Parameters<TV>[0], breakpoints extends string> {
   preset: T;
-  responsiveVariants?: Record<keyof T, boolean> | boolean;
+  responsiveVariants?: Partial<Record<keyof T, boolean> | boolean>;
   breakpoints?: breakpoints[]
 }
 
@@ -14,6 +14,7 @@ type TransformNestedKeys<T> = {
   : never;
 };
 
+//TODO: type to avoid passing in the result component props that are not allowed?
 
 export function tvr<T extends Parameters<TV>[0], breakpoints extends string>({
   breakpoints,
