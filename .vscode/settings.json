@@ -1,0 +1,18 @@
+{
+  "chat.promptFiles": true,
+  "chat.promptFilesLocations": {
+    ".github/prompts": true,
+    "sandbox-experiments/sandbox-vite/prompts":true
+  },
+  "github.copilot.chat.codeGeneration.instructions": [
+    {
+      "file": ".github/copilot-instructions.md"
+    },
+    {
+      "file": ".github/instructions/code-gen/ts/copilot-instructions.md"
+    },
+  ],
+  "cSpell.words": [
+    "ecourgament"
+  ],
+}
