@@ -78,7 +78,6 @@ export function createResponsiveStyled<
     responsiveVariants
   });
 
-  console.log(responsiveVariantsNames, preset)
 
   return createStyledComponent({
     //@ts-expect-error type is ok
@@ -107,8 +106,11 @@ export function createResponsiveStyled<
 }
 
 type PickResponsiveVariants<
-  Variants,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Variants extends Record<string, Record<string, any>>,
   ResponsiveVariants extends Partial<Record<keyof Variants, boolean>>
 > = {
-  [K in keyof ResponsiveVariants as ResponsiveVariants[K] extends true ? K : never]: K extends keyof Variants ? Variants[K] : never;
+  [K in keyof ResponsiveVariants as ResponsiveVariants[K] extends true ? K : never]: K extends keyof Variants
+    ? keyof Variants[K]
+    : never;
 };

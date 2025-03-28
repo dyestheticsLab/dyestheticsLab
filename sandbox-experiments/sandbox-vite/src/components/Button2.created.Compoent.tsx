@@ -2,7 +2,17 @@ import { createResponsiveStyled } from "@dyesthetics-lab/react-tv-variants-creat
 
 
 const Button = createResponsiveStyled({
-  preset: {},
+  preset: {
+    variants: {
+      customColor: {
+        danger: "bg-red-500 text-white",
+      }
+    },
+  },
+  breakpoints: ["sm", "lg"],
+  responsiveVariants: {
+    customColor: true,
+  },
   tag: "button",
 });
 

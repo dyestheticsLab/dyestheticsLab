@@ -2,7 +2,6 @@ import { createStyledComponent } from "@dyesthetics-lab/react-component-creators
 import { VariantProps } from "tailwind-variants";
 import buttonConfig from './Button.tailwindConfig.json'
 import { tvr, dividePropsByVariants } from "@dyesthetics-lab/tailwind-utils";
-import { TailwindComponentConfig, createResponsiveStyled } from "@dyesthetics-lab/react-tv-variants-creators";
 const {preset, options } = buttonConfig
 
 

@@ -1,5 +1,11 @@
 # @dyesthetics-lab/tailwind-utils
 
+## 0.6.0
+
+### Minor Changes
+
+- Fixed typings
+
 ## 0.5.0
 
 ### Minor Changes
