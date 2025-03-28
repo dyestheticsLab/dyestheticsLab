@@ -42,5 +42,4 @@ const A = createResponsiveStyled({
   breakpoints: ["sm", "lg"],
 });
 
-
 console.log(ButtonCusom)
