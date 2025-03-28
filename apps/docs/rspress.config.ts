@@ -22,5 +22,7 @@ export default defineConfig({
         content: 'https://github.com/dyestheticsLab/dyestheticsLab',
       },
     ],
+    lastUpdated: true,
+    search: true
   },
 });

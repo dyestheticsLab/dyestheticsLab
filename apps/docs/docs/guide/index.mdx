@@ -1,27 +1,20 @@
 # Introduction
 
-We are creating several libraries to help us create design systems specially for
-React.js. It is going to be a long road ahead of us.
+We are creating several libraries to help us build design systems, especially for React.js. It is going to be a long journey ahead of us.
 
-This idea was born when in a university project we were asked to complain
-to several constraints because we asked for a challenge.
+This idea was born during a university project where we were challenged to meet several constraints because we asked for a more demanding task.
 
-By now we know that there are out there magnificent tools that are evolving
-fast and offer a really good DX, decent performance and portability but they
-did not covered 100% of what we were asked for, like:
+We know there are many excellent tools out there that are evolving rapidly, offering great developer experience (DX), decent performance, and portability. However, they did not fully meet 100% of the requirements we were tasked with, such as:
 
 - Short build times
 - No runtime overhead
-- 90% of css coverage
-- To work with RSC and get the styles inf in runtime (SSR)
-- Good JSX DX
+- 90% CSS coverage
+- Compatibility with React Server Components (RSC) and runtime style information (SSR)
+- Good JSX developer experience
 
-## Projects that inspire us
+## Projects That Inspire Us
 
-While searching for some tools to help us with our project we found
-some really good libraries that we used as inspiration or even
-we build our tools around them, we really thank the open source community
-for your incredible work:
+While researching tools to assist with our project, we discovered some amazing libraries that inspired us or even became the foundation of our tools. We are deeply grateful to the open-source community for their incredible work:
 
 - [Radix](https://www.radix-ui.com/)
 - [Tamagui](https://tamagui.dev/)
@@ -31,94 +24,64 @@ for your incredible work:
 - [Tailwind](https://tailwindcss.com/)
 - [Tailwind Variants](https://www.tailwind-variants.org/)
 
+## Some Context...
 
-## Some context...
-For instance, we wanted to use some css variant generator, because you actually
-do not know what variants you are going to need in compile time, all
-the classes representing possible states of that variant were generated
-and the coverage of used css was not accepted by our mentors.
+For example, we wanted to use a CSS variant generator because you often don't know what variants you'll need at compile time. All the classes representing possible states of that variant were generated, but the CSS coverage was not acceptable to our mentors.
 
-Then we came upon [Tamagui](https://tamagui.dev/),
-which was wonderful because it offered optimizations reading the jsx
-and extracting the variants and creating a css file with only the classes
-that were used. We love Tamagui.
+Then we discovered [Tamagui](https://tamagui.dev/), which was wonderful because it optimized JSX by extracting variants and creating a CSS file with only the classes that were used. We love Tamagui.
 
-But then, we needed to use the components as RSC and also the styles
-were not known for those RSC ahead of time, since we were fetching that
-info from a remote data source (we were doing SSR).
+However, we needed to use the components as RSC, and the styles were not known ahead of time for those RSC components since we were fetching that information from a remote data source (SSR).
 
-And the heuristics to know how to compile a component were going to be
-lost since we do not know which variant value to apply till we are on runtime.
+The heuristics for compiling a component were lost because we didn't know which variant value to apply until runtime.
 
-That is why we are building some tolls to help us build up, with luck, a complete
-framework that can address all the constraints we are facing.
+This is why we are building tools to help us create, with luck, a complete framework that addresses all the constraints we are facing.
 
-In that context we actually do not aspire to be a replacement of those
-very powerful libraries, we are just experimenting with some ideas
+In this context, we do not aspire to replace these very powerful libraries. We are simply experimenting with some ideas.
 
+## The Road Ahead
 
-## The road ahead
-As for now we are building a library of react component creators and
-around that a tailwind wrapper using tailwind variants (we love tailwind variants)
+Currently, we are building a library of React component creators and, around that, a Tailwind wrapper using Tailwind Variants (we love Tailwind Variants).
 
-To make up for the missing responsive variants we are creating a babel loader
-and a vite plugin to create the responsive variants in compile time (all of them).
+To address the missing responsive variants, we are creating a Babel loader and a Vite plugin to generate all the responsive variants at compile time.
 
-As for the next steps we are looking to create a SWC plugin to
-extract only the needed classes from from JSX syntax and transform them in
-optimized components with only the needed tailwind classes.
+Next, we plan to create an SWC plugin to extract only the necessary classes from JSX syntax and transform them into optimized components with only the required Tailwind classes.
 
-Still the component creator will help us in dev mode meanwhile we are learning
-enough rust to create the plugin.
+The component creator will assist us in development mode while we learn enough Rust to create the plugin.
 
-As for the the RSC that hav a data source in runtime, we want to create a
-set of NEXt.js utilities to help us register the needed classes when building in
-SSG mode and use that resolved values to create only the needed classes in CSS file
-and also to inline the critical CSS.
+For RSC components with runtime data sources, we aim to create a set of Next.js utilities to register the required classes during SSG mode. These utilities will use the resolved values to generate only the necessary classes in the CSS file and inline the critical CSS.
 
-We know that for client components it is kind of different so we are thinking in
-some way to extract the classes that are going to be passed to the client component
-from the server component, kind of a proxy.
+For client components, the approach is slightly different. We are exploring ways to extract the classes passed to the client component from the server component, possibly using a proxy.
 
-This approaches will need a strong set of rules and conventions the we need to
-effectively communicate towards warnings and linter rules.
+These approaches will require a strong set of rules and conventions, which we need to effectively communicate through warnings and linter rules.
 
-As you can see there is a lot of work to do and we are just starting.
+As you can see, there is a lot of work to do, and we are just getting started.
 
-## What we have so far
+## What We Have So Far
 
-We have several packages but the three most usable are:
+We have several packages, but the three most useful are:
 
-** @dyesthetics-lab/react-component-creators **
-This is our base to create polymorphic components with styles and variants
+**@dyesthetics-lab/react-component-creators**
+This is our base library for creating polymorphic components with styles and variants.
 
-- @dyesthetics-lab/react-tv-variants-creators
-This is a wrapper around tailwind variants and @dyesthetics-lab/react-component-creators
-to create responsive variants, but be careful, this does not work alone
+- **@dyesthetics-lab/react-tv-variants-creators**
+  A wrapper around Tailwind Variants and @dyesthetics-lab/react-component-creators to create responsive variants. Note: This does not work as a standalone library.
 
-- @dyesthetics-lab/tailwind-manifest-creators
-To effectively create the responsive variants we need to create a manifest
-with all the responsive variants to make tailwindcss read it to generate the
-needed CSS, In this module we have loaders and plugins to helps us do so.
-(We are planning to offer you a codegen cli also to give you an alternative to
-this package)
+- **@dyesthetics-lab/tailwind-manifest-creators**
+  To effectively create responsive variants, we need to generate a manifest with all the responsive variants so TailwindCSS can read it and generate the required CSS. This module includes loaders and plugins to help with this process. (We are also planning to offer a codegen CLI as an alternative to this package.)
 
-You can test out our following libraries
+You can test the following libraries:
 - @dyesthetics-lab/react-component-creators
 - @dyesthetics-lab/react-tv-variants-creators
 - @dyesthetics-lab/tailwind-utils
 - @dyesthetics-lab/tailwind-manifest-creators
 - @dyesthetics-lab/tailwind-utils
 
-## Can I help out?
-Of course! We are looking for contributors to help us out with the project. We
-want to learn, but this days we are really busy with the university so be patient
-with if you do not have an answer right away, nevertheless any pr from a fork is going
-to be reviewed in the same week you it is sent.
+## Can I Help Out?
 
-## Final words
-We are here to learn, we really appreciate any feedback you can give us.
+Of course! We are looking for contributors to help us with the project. We want to learn, but we are currently very busy with university, so please be patient if we don't respond immediately. Nevertheless, any PR from a fork will be reviewed within the same week it is submitted.
 
-Also we have an [article](https://medium.com/@shadowrunner8095/my-deep-dive-road-creating-a-design-system-component-library-with-tailwind-part-1-0d7195316741)
-that ignited the idea of this project, bu created the libraries in the spur
-of the moment right after the article was published.
+## Final Words
+
+We are here to learn and greatly appreciate any feedback you can provide.
+
+Additionally, we have an [article](https://medium.com/@shadowrunner8095/my-deep-dive-road-creating-a-design-system-component-library-with-tailwind-part-1-0d7195316741) that inspired this project. We created the libraries shortly after the article was published.

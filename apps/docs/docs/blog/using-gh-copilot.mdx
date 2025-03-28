@@ -1,0 +1,29 @@
+# Using GitHub Copilot with Our Libraries
+
+> Original written: 03/28/2025
+
+GitHub Copilot is a wonderful tool that now allows us to automatically attach markdown files as context for code generation, code review, and test generation. Additionally, Copilot offers a powerful feature called reusable prompts, which can help us create code with predefined instructions.
+
+When experimenting with our libraries, we wanted to take advantage of these features. First, we modified our `.vscode` settings to point to our prompts and code generation files. You can find more information on how to do this in [this link](https://code.visualstudio.com/docs/copilot/copilot-customization#_define-code-review-custom-instructions).
+
+Next, we started creating the instructions. For instance, in the file `.github/copilot-instructions.md`, we specified that we use React 19, a monorepo setup, and included health advice and words of encouragement—because empathy matters.
+
+Now, GitHub Copilot Chat provides answers while keeping those files in context with our custom instructions.
+
+## The Prompt File
+
+To create components using one of our packages, we needed to reference the code of that package. GitHub Copilot documentation suggests doing this in the form of markdown links. Since we have the code in the same monorepo, we can reference it directly. However, if you are using our libraries without direct access to the source code in the same repository, how can this be solved?
+
+You can reference the code in your `node_modules` folder, including the corresponding typings. While the JavaScript code is minified and harder for GitHub Copilot to use, the typings are still accessible.
+
+Here’s an example of how to do this:
+
+```md
+Please use [this code](../node_modules/@dyesthetics-lab/some-library/index.js), which has its corresponding typings in [this file](../node_modules/@dyesthetics-lab/some-library/index.d.ts), to create a new component. Use [this Tailwind CSS file](../globals.css) to complete the variants, keeping in mind the custom CSS variables for the theme shown there.
+```
+
+Make sure to adjust the paths relative to the location of your prompt file.
+
+## Final Words
+
+Yes, we should document the API and typings in our libraries to further enhance AI code generation. Nevertheless, this example can be expanded to other scenarios and libraries beyond our own.
