@@ -1,5 +1,11 @@
 # @dyesthetics-lab/tailwind-utils
 
+## 0.4.0
+
+### Minor Changes
+
+- Fixed null object
+
 ## 0.3.0
 
 ### Minor Changes
