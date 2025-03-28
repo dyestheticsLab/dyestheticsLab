@@ -1,5 +1,16 @@
 # @dyesthetics-lab/react-tv-variants-creators
 
+## 3.0.0
+
+### Minor Changes
+
+- fix: dist folder
+
+### Patch Changes
+
+- Updated dependencies
+  - @dyesthetics-lab/tailwind-utils@0.3.0
+
 ## 2.0.0
 
 ### Minor Changes

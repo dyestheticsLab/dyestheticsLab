@@ -1,5 +1,11 @@
 # @dyesthetics-lab/tailwind-utils
 
+## 0.3.0
+
+### Minor Changes
+
+- fix: dist folder
+
 ## 0.2.0
 
 ### Minor Changes
