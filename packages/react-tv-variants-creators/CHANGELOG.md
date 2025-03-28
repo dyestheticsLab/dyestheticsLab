@@ -1,5 +1,11 @@
 # @dyesthetics-lab/react-tv-variants-creators
 
+## 1.1.0
+
+### Minor Changes
+
+- 54f8e6e: Fixed typings
+
 ## 1.0.0
 
 ### Minor Changes
