@@ -3,6 +3,7 @@ import { MetaReactElementProps, MorphProps } from "@dyesthetics-lab/react-types"
 import { CreateComponentWithStyleOptions } from "../create-component-with-style-props";
 import { ComponentResolver } from "../create-react-meta-component";
 
+export type { ComponentResolver }
 
 export interface CreateStyledComponentOptions<
   DefaultElement extends ElementType,
