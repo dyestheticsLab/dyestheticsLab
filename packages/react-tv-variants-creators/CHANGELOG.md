@@ -1,5 +1,13 @@
 # @dyesthetics-lab/react-tv-variants-creators
 
+## 6.0.1
+
+### Patch Changes
+
+- classNameResolver interface changed to receive styleProp and className together
+- Updated dependencies
+  - @dyesthetics-lab/react-component-creators@0.1.1
+
 ## 6.0.0
 
 ### Minor Changes
