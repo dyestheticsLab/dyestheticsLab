@@ -1,7 +1,7 @@
 {
   "name": "@dyesthetics-lab/react-tv-variants-creators",
   "private": false,
-  "version": "6.0.0",
+  "version": "6.0.1",
   "license": "MIT",
   "exports": {
     ".": {
@@ -24,29 +24,49 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "test": "vitest",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "@dyesthetics-lab/react-component-creators": "workspace:*",
+    "@dyesthetics-lab/react-types": "workspace:*",
     "@dyesthetics-lab/tailwind-utils": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-variants": "^1.0.0",
-    "@dyesthetics-lab/react-types": "workspace:*"
+    "tailwind-variants": "^1.0.0"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^3",
     "@eslint/js": "^9.21.0",
+    "@storybook/addon-essentials": "^8.6.11",
+    "@storybook/addon-interactions": "^8.6.11",
+    "@storybook/addon-onboarding": "^8.6.11",
+    "@storybook/blocks": "^8.6.11",
+    "@storybook/react": "^8.6.11",
+    "@storybook/react-vite": "^8.6.11",
+    "@storybook/test": "^8.6.11",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-storybook": "^0.11.6",
     "globals": "^15.15.0",
+    "jsdom": "^26.0.0",
+    "storybook": "^8.6.11",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0",
-    "vite-plugin-dts": "^4.5.3"
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.0.9"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
   }
 }
