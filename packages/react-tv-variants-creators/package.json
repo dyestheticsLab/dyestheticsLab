@@ -1,7 +1,7 @@
 {
   "name": "@dyesthetics-lab/react-tv-variants-creators",
   "private": false,
-  "version": "6.0.0",
+  "version": "6.0.1",
   "license": "MIT",
   "exports": {
     ".": {
