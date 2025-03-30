@@ -1,0 +1,165 @@
+# Do you need a state manager for that DATA?
+You may not need a state manager for some type fo data. But before diving
+into it some words of caution.
+
+
+## Words of caution :)
+
+Don't get me wrong—state managers are incredibly powerful, and I love them.
+This article isn't about telling you to rip Redux, Zustand, or Jotai out of your codebase.
+In many cases, they are essential for managing state that multiple components subscribe to,
+ensuring they update when the state changes.
+
+But here's the thing: not all data in your app needs that kind of management. Some state
+can be handled differently, without introducing unnecessary complexity or
+performance overhead.
+
+
+*State Managers Are Not an All-or-Nothing Decision*
+
+This isn't a “pick one and stick with it” scenario. State managers and
+alternative approaches can coexist in your app.
+
+Some data fits naturally in a global store, while other pieces
+of state can be handled more efficiently without one.
+
+It all depends on how and where the data is used.
+
+We are going to use TanStack Router for the example, but the same applies to other
+routing libraries provided they have the features to support it.
+
+## A simple example
+I'm going to present a simple example for the sake of explanation.
+Imagine we have an input field where a user enters some data.
+Once the input is provided and validated, the form (using React 19 form actions on the client side)
+is submitted. The action function then sends a request to the backend
+with the input data, and if the response is successful, we navigate
+the user to another page.
+
+The important part is that we need data from the response on the
+second page either to display it visually or to
+process it before showing something to the user.
+
+Using TanStack Router, you can pass that data via search
+parameters using the navigation function from useNavigate.
+
+(This is a simplified example,
+and in a real-world scenario, you would likely
+have more complex data structures and error handling.)
+
+```tsx
+import { useNavigate } from '@tanstack/react-router';
+
+function Form(){
+  const navigate = MyFirstRoute.useNavigate();
+  const action = async ()=>{
+    const { data, someOtherData } = await someMadeUpRequest();
+
+    //some response processing
+
+    await navigate({
+      to: '/next-page',
+      search: {
+        data: data,
+        otherData: otherData,
+      },
+    })
+  }
+
+  return <form action={action}>
+    {/* form fields */}
+  </form>
+
+}
+```
+
+And now we can get the response data that is *only needed in the second page*
+with the `useSearch` hook
+
+```tsx
+import { useSearch } from '@tanstack/react-router';
+
+
+function NextPage(){
+  const { data, otherData } = MySecondRoute.useSearch();
+
+  return (
+    <div>
+      <h1>Next Page</h1>
+      <p>Data: {data}</p>
+      <p>Other Data: {otherData}</p>
+    </div>
+  );
+}
+```
+
+
+But what if you don't want to expose the data in the URL as search params?
+Because if you use navigate with the search params, it will be visible in the URL.
+
+In that case, you can mask those parameters. TanStack Router supports this approach
+by maintaining temporary location state internally.
+
+```tsx
+import { useNavigate } from '@tanstack/react-router';
+function Form(){
+  const navigate = MyFirstRoute.useNavigate();
+  const action = async ()=>{
+    const { data, someOtherData } = await someMadeUpRequest();
+
+    //some response processing
+
+    await navigate({
+      to: '/next-page',
+      state: {
+        data: data,
+        otherData: otherData,
+      },
+      mask: {
+        to: '/next-page',
+        // because here are not listed the search params, they will
+        // not be visible in the URL
+        // but they will be available with useSearch or in the loaders
+      }
+    })
+  }
+
+  return <form action={action}>
+    {/* form fields */}
+  </form>
+}
+
+```
+
+This  data, can be used as well in your destination route loaders, there you have the opportunity
+to perform any required operations before rendering.
+
+
+Again, this approach isn't for every case. Consider a scenario where you have
+a component, say, a button—and one or more components that aren't its
+direct children need to update visually when that button is clicked. In this
+scenario, we're dealing with an app state, that is, state internal to your application
+that isn't fetched from an external system. Here, it makes sense to use a state manager.
+
+
+And what about React Query? It features a powerful caching mechanism. If you obtain
+a result in one mutation or query, you can retrieve the data response
+and even the params that were used for the request from its cache
+elsewhere in your app when needed. (There's a great
+[article](https://tkdodo.eu/blog/react-query-as-a-state-manager) on this
+topic by TkDodo that explains it in more detail.)
+
+The key is to think carefully about how the data is going to be used.
+Some developers prefer to centralize everything in one store for
+predictability. While that creates a consistent pattern, making
+it easy for AI tools and new developers to follow, it can also
+lead to workarounds and unnecessary re-renders.
+
+The argument for centralization is based on having one predictable pattern;
+however, this can sometimes create secondary issues.
+
+I believe that better documentation, like a flow diagram outlining different scenarios,
+could help clarify when to use a state manager versus alternative approaches. Perhaps even an abstraction that handles data storage based on declared usage, or heuristics that decide the best storage method, could be beneficial. It’s a bit of a stretch, but it’s an idea that popped into my head while writing this.
+
+What do you think? Do you have examples where the data doesn't need to be
+stored in a state manager? Let's discuss!
