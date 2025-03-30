@@ -1,0 +1,57 @@
+name: Changeset Validation
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  validate-changesets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for changeset files
+        id: check-changesets
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            
+            const changesetFiles = files.filter(file => 
+              file.filename.startsWith('.changeset/') && 
+              file.filename.endsWith('.md') &&
+              file.status !== 'removed'
+            );
+            
+            if (changesetFiles.length > 0) {
+              console.log("Changeset files found:", changesetFiles.map(f => f.filename).join(', '));
+              core.setOutput('found', 'true');
+            } else {
+              console.log("No changeset files found in this PR");
+              core.setOutput('found', 'false');
+            }
+
+      - name: Comment on PR if no changesets
+        if: steps.check-changesets.outputs.found == 'false'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ **Changeset Validation Failed**\n\nThis PR does not include any `.changeset/*.md` files. Please add appropriate changeset files to document your changes. Learn more about changesets [here](https://github.com/changesets/changesets).'
+            });
+            
+            core.setFailed('No changeset files found. Please add appropriate changeset files.');
