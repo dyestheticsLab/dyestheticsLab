@@ -1,0 +1,220 @@
+Today I need to learn how to use Zustand. However, before I even started, I
+told myself, "Wait a minute—let's complicate my life for a few minutes to see
+how far I can get."
+
+First of all, you must already understand how **useSyncExternalStore** works
+before diving into what I'm doing.
+
+So what I'm going to do is create an observer creator, because—as you
+know—**useSyncExternalStore** requires two things: a function that subscribes
+it to an external store and a snapshot function. The subscription function is
+meant to tell the observer to save a function to be executed later, which then
+calls the snapshot function. When the snapshot function runs, it compares the
+previous value with the new snapshot result to decide whether or not to
+trigger a re-render.
+
+Here's what the code might look like:
+
+```tsx
+const createObserver = <T>({ initialState }: { initialState: T }) => {
+  let state = initialState;
+  const listeners = new Set<() => void>();
+
+  const dispatch = () => {
+    listeners.forEach((listener) => listener());
+  };
+
+  return {
+    getState: (pickerFn?: (state: T) => any) =>
+      pickerFn ? pickerFn(state) : state,
+    setState: (newStateOrSetter: T | ((prevState: T) => T)) => {
+      if (typeof newStateOrSetter === 'function')
+        state = newStateOrSetter(state);
+      else state = newStateOrSetter;
+
+      dispatch();
+    },
+    subscribe: (listener: () => void) => {
+      listeners.add(listener);
+      return () => {
+        listeners.delete(listener);
+      };
+    },
+  };
+};
+```
+
+The state is kept inside the closure, and the getState function accepts a
+picker function so that if you pass a big object, you aren't forcing all
+subscribers to re-render every time—it's better to pick only the part of the
+object you need to compare.
+
+Nice and done. Now, the problem with this approach is that if you create this
+at the top level, you're creating a singleton—even if you need it for just one
+page (I'm talking about CSR). So how do you scope it to a single page and then
+let it disappear?
+
+Well, we can use React Context. But before doing that, I'll create two hooks
+to simplify usage. They look anemic (a tech term, like in anemic classes)
+actually, but here they are anyway:
+
+```tsx
+const useCallbackSubscribe = (ObservableContext, pickerFn) => {
+  const { getState, subscribe } = useContext(ObservableContext);
+  const cb = useCallback(() => getState(pickerFn), [pickerFn, getState]);
+  return useSyncExternalStore(subscribe, cb);
+};
+
+// An optional, not optimized version just in case:
+const useSubscribe = (ObservableContext, pickerFn) => {
+  const { getState, subscribe } = useContext(ObservableContext);
+  return useSyncExternalStore(subscribe, () => getState(pickerFn));
+};
+
+const useNotify = (ObservableContext) => {
+  const { setState } = useContext(ObservableContext);
+  return setState;
+};
+```
+
+Now what follows is the creation of the context. Isn't that a singleton as
+well? Yes—maybe this will prove useful later when I want to ensure that this
+is client-side only or for similar scenarios. Let's continue:
+
+```tsx
+export const IsActiveListenerContext = createContext<
+  ReturnType<typeof createObserver>
+>();
+
+export const IsActiveListenerProvider = <T>({
+  initialValue,
+  children,
+}: {
+  initialValue: T;
+  children: ReactNode;
+}) => {
+  const [observer] = useState(() =>
+    createObserver<T>({ initialState: initialValue })
+  );
+
+  return (
+    <IsActiveListenerContext.Provider value={observer}>
+      {children}
+    </IsActiveListenerContext.Provider>
+  );
+};
+```
+
+Now we can have:
+
+```tsx
+function Page() {
+  return (
+    <IsActiveListenerProvider initialValue={false}>
+      <Emisor />
+      {/* more code */}
+      <Listener />
+    </IsActiveListenerProvider>
+  );
+}
+```
+
+For the Emisor component:
+
+```tsx
+function Emisor() {
+  const notify = useNotify(IsActiveListenerContext);
+  const handleClick = () => {
+    notify((prev) => !prev);
+  };
+  return <button onClick={handleClick}>Click Me to Toggle</button>;
+}
+```
+
+And for the Listener component:
+
+```tsx
+function Listener() {
+  const isActive = useSubscribe(IsActiveListenerContext, (state) => state);
+  return <div>{isActive && 'Hello, I am active'}</div>;
+}
+```
+
+Now it will work. Some additional considerations: I may need a smarter way to
+create contexts—a context factory that creates contexts when needed so I can
+choose my listeners by key from a map. And why would I do that? Because
+microfrontends :v. I'm looking for a global way to communicate events
+throughout my app, and yes, I need a more agnostic store. I think that
+createObserver is more than enough. You can subscribe to it with a useEffect
+or any other method you can imagine, and by using the picker, you can extract
+only what you want from a big object (even though microfrontends say the API
+between your UI components should be minimal and clean).
+
+I'm also looking for a way so that when subscribing, you can tell the
+observer, "Hey, when emitting, just do it for these listeners and not the
+others." I'm thinking of something like this (heads up: a lot of any types , here, this was a last minute idea):
+
+```tsx
+const createObserver = <T>({ initialState }: { initialState: T }) => {
+  let state = initialState;
+  const listeners = new Set<any>();
+
+  const resolveDispatch = ({
+    dispatch,
+    predicate,
+  }: {
+    dispatch: () => void;
+    predicate?: (state: T, meta?: any) => boolean;
+  }) => {
+    if (!predicate) return dispatch();
+    if (predicate(state)) dispatch();
+  };
+
+  const dispatch = (predicate?: (state: T, meta?: any) => boolean) => {
+    if (!predicate) {
+      listeners.forEach((listener) => resolveDispatch(listener));
+    } else {
+      listeners.forEach(
+        ({
+          dispatch,
+          meta,
+          predicate: innerPredicate,
+        }: {
+          dispatch: () => void;
+          meta?: any;
+          predicate?: (state: T, meta?: any) => boolean;
+        }) => {
+          if (predicate(state, meta)) {
+            resolveDispatch({ dispatch, predicate: innerPredicate });
+          }
+        }
+      );
+    }
+  };
+
+  return {
+    getState: (pickerFn?: (state: T) => any) =>
+      pickerFn ? pickerFn(state) : state,
+    setState: (
+      newStateOrSetter: T | ((prevState: T) => T),
+      predicate?: (state: T, meta?: any) => boolean
+    ) => {
+      if (typeof newStateOrSetter === 'function')
+        state = newStateOrSetter(state);
+      else state = newStateOrSetter;
+
+      dispatch(predicate);
+    },
+    subscribe: (listener: any) => {
+      listeners.add(listener);
+    },
+  };
+};
+```
+
+And now it's time to check if this actually supports my idea for a
+microfrontend with an app shell.
+
+There is a caveat, though: now that I see this, subscribing to events in this
+way isn't fully possible. Maybe I need to create a factory here? See you in
+another article where I continue to make my brain wrestle and my life harder.
